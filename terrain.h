@@ -24,7 +24,7 @@ public:
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);
     void setDirtAt(int x, int y, double dirtValue);
-    void generateTerrainFromNoise(double Hfreq,double Hamp, double MFreq,double MAmp, double BFreq, double BAmp );
+    void generateTerrainFromNoise(double Hfreq,double Hamp);
     double getHeightAt(int x, int y);
     double getDirtAt(int x, int y);
     int getLenght();

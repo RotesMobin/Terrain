@@ -8,6 +8,13 @@ Terrain::Terrain(int width, int lenght)
 {
     this->width = width;
     this->lenght = lenght;
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < lenght; j++)
+        {
+            height.append(0);
+        }
+    }
 }
 
 double Terrain::getHeightAt(int x, int y)
@@ -50,7 +57,7 @@ void Terrain::setDirtAt(int x, int y, double dirtValue)
     }
 }
 
-void Terrain::generateTerrainFromNoise(double Hfreq,double Hamp, double MFreq,double MAmp, double BFreq, double BAmp )
+void Terrain::generateTerrainFromNoise(double Hfreq,double Hamp)
 {
     double i, j;
     Perlin perlin = Perlin();
@@ -59,20 +66,7 @@ void Terrain::generateTerrainFromNoise(double Hfreq,double Hamp, double MFreq,do
     {
         for(j = 0; j < lenght; j++)
         {
-            height.append(Hamp * (perlin.noise(i / (width / Hfreq), j / (lenght / Hfreq))));
-            //qDebug()<<noise(i,j);
-        }
-    }
-
-    for(i=0;i<width;i++){
-        for(j=0;j<lenght;j++){
-            height[(i*lenght)+j]+=MAmp*(perlin.noise(i/(width/MFreq),j/(lenght/MFreq)));
-            //qDebug()<<noise(i,j);
-        }
-    }
-    for(i=0;i<width;i++){
-        for(j=0;j<lenght;j++){
-            height[(i*lenght)+j]+=BAmp*(perlin.noise(i/(width/BFreq),j/(lenght/BFreq)));
+            height[(i*lenght)+j]+=Hamp * (perlin.noise(i / (width / Hfreq), j / (lenght / Hfreq)));
             //qDebug()<<noise(i,j);
         }
     }
