@@ -17,7 +17,12 @@ class Mesh
 {
 public:
     Mesh();
+<<<<<<< HEAD
     Mesh(Terrain T);
+=======
+    //Mesh(Terrain T);
+    void saveAsObj();
+>>>>>>> origin/master
     int LoadFromOff(QString fileName);
     void draw();
     void drawFilDeFer();

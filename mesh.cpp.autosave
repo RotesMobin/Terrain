@@ -18,26 +18,8 @@ Mesh::Mesh(Terrain T){
                 faceInd++;
             }
 
-<<<<<<< HEAD
         }
     }
-=======
-//}
-void Mesh::saveAsObj(){
-    QFile file("Terrain.obj");
-    file.open(QIODevice::WriteOnly);
-    QTextStream out(&file);
-    QString text= "o Terrain\n";
-    for(int i=0; i<sommets.size();i++){
-        text+=QString("v %1F 2F 3F\n").arg("%1F","%2F","%3F").arg(sommets[i].getPoint().x(),sommets[i].getPoint().y(),sommets[i].getPoint().z());
-    }
-    text+="\n";
-    for(int i=0;i<faces.size();i++){
-        text+=QString("f %1F 2F 3F\n").arg("%1F","%2F","%3F").arg(faces[i].getS1(),faces[i].getS2(),faces[i].getS2());
-    }
-    out<<text;
-    file.close();
->>>>>>> origin/master
 }
 
 int Mesh::LoadFromOff(QString fileName){
@@ -168,17 +150,6 @@ void Mesh::saveAsOFF(QString name){
     }
 }
 
-void Mesh::display(){
-    int i=0;
-    glColor3f(0.0,1.0,0.0);
-    for(i=0;i<height.size();i++){
-        glBegin(GL_POINTS);
-        glVertex3f((((double)i/(double)lenght)/(double)lenght)-0.5
-                   ,((double)(i%lenght)/(double)width)-0.5
-                   ,height[i]);
-        glEnd();
-    }
-}
 
 Face* Mesh::faceDebut(){
     return &faces[0];
