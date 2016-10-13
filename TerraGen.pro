@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     edge.cpp \
     face.cpp \
     mesh.cpp \
-    sommet.cpp
+    sommet.cpp \
+    perlin.cpp
 
 HEADERS  += mainwindow.h \
     gldisplay.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     edge.h \
     face.h \
     mesh.h \
-    sommet.h
+    sommet.h \
+    perlin.h
 
 FORMS    += mainwindow.ui
 
