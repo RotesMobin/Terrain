@@ -12,11 +12,11 @@ Mesh::Mesh(Terrain T)
     int faceInd=0;
     for(i=0;i<T.getWidth();i++){
         for(j=0;j<T.getLenght();j++){
-            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j))));
+            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j)*500)));
             if(j!=0 && i!=0){
-                this->faces.append(Face(faceInd,i-1+j-1,i-1+j,i+j));
+                this->faces.append(Face(faceInd,T.getLenght()*(i-1)+(j-1),T.getLenght()*(i-1)+j,T.getLenght()*i+j));
                 faceInd++;
-                this->faces.append(Face(faceInd,i-1+j-1,i+j-1,i+j));
+                this->faces.append(Face(faceInd,T.getLenght()*(i-1)+(j-1),T.getLenght()*i+j-1,T.getLenght()*i+j));
                 faceInd++;
             }
 

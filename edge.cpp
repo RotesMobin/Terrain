@@ -13,7 +13,6 @@ int Edge::getF2(){
     return f2;
 }
 
-
 void Edge::setF1(int f1){
     this->f1=f1;
 }
