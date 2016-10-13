@@ -24,15 +24,14 @@ void Mesh::saveAsObj(){
     QFile file("Terrain.obj");
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
-    QString text= "o Terrain\n";
+    out<<"o Terrain\n";
     for(int i=0; i<sommets.size();i++){
-        text+=QString("v %1F %2F %3F\n").arg("%1F","%2F","%3F").arg(sommets[i].getPoint().x(),sommets[i].getPoint().y(),sommets[i].getPoint().z());
+        out<<"v "<<sommets[i].getPoint().x()<<" "<<sommets[i].getPoint().y()<<" "<<sommets[i].getPoint().z()<<"\n";
     }
-    text+="\n";
+    out<<"\n";
     for(int i=0;i<faces.size();i++){
-        text+=QString("f %1F %2F %3F\n").arg("%1F","%2F","%3F").arg(faces[i].getS1(),faces[i].getS2(),faces[i].getS2());
+        out<<"f "<<faces[i].getS1()+1<<"// "<<faces[i].getS2()+1<<"// "<<faces[i].getS3()+1<<"//\n";
     }
-    out<<text;
     file.close();
 }
 
