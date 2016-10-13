@@ -13,7 +13,7 @@
 #include <QRgb>
 #include <QColor>
 #include <math.h>
-#include <mesh.h>
+
 class Terrain
 {
 public:

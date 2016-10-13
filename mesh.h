@@ -17,7 +17,7 @@ class Mesh
 {
 public:
     Mesh();
-    //Mesh(Terrain T);
+    Mesh(Terrain T);
     int LoadFromOff(QString fileName);
     void draw();
     void drawFilDeFer();

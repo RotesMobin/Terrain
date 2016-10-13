@@ -5,6 +5,7 @@
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <terrain.h>
+#include <mesh.h>
 
 class GLDisplay : public QGLWidget
 {
@@ -25,7 +26,7 @@ protected:
 private:
     void drawSierpinski();
     Terrain terrain;
-
+    Mesh m;
     float _angleX;
     float _angleY;
     QPoint _position;

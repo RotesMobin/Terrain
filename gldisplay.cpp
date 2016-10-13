@@ -23,6 +23,8 @@ void GLDisplay::initializeGL()
 
     terrain=Terrain(512,512);
     terrain.generateTerrainFromNoise();
+    m=Mesh(terrain);
+
     //terrain.loadFromHeightMap("Data/test2.png");
 }
 
@@ -35,7 +37,8 @@ void GLDisplay::paintGL()
     glRotatef(_angleX, 0.0f, 1.0f, 0.0f);
     glRotatef(_angleY, 1.0f, 0.0f, 0.0f);
     //resizeGL(terrain.getWidth(),terrain.getLenght());
-    terrain.display();
+    //terrain.display();
+    m.draw();
 }
 
 void GLDisplay::resizeGL(int w, int h)

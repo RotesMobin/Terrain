@@ -3,12 +3,24 @@
 
 
 Mesh::Mesh(){
-    //point.append(QVector3D{0.1f,0.1f,0.1f});
-    //printf("x:%f y:%f z:%f\n",point.at(0).x(),point.at(0).y(),point.at(0).z());
-}
-//Mesh::Mesh(Terrain T){
 
-//}
+}
+Mesh::Mesh(Terrain T){
+    int i=0,j=0;
+    int faceInd=0;
+    for(i=0;i<T.getWidth();i++){
+        for(j=0;j<T.getLenght();j++){
+            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j))));
+            if(j!=0 && i!=0){
+                this->faces.append(Face(faceInd,i-1+j-1,i-1+j,i+j));
+                faceInd++;
+                this->faces.append(Face(faceInd,i-1+j-1,i+j-1,i+j));
+                faceInd++;
+            }
+
+        }
+    }
+}
 
 int Mesh::LoadFromOff(QString fileName){
     QMap<QString,Edge*> map;
@@ -138,6 +150,17 @@ void Mesh::saveAsOFF(QString name){
     }
 }
 
+void Mesh::display(){
+    int i=0;
+    glColor3f(0.0,1.0,0.0);
+    for(i=0;i<height.size();i++){
+        glBegin(GL_POINTS);
+        glVertex3f((((double)i/(double)lenght)/(double)lenght)-0.5
+                   ,((double)(i%lenght)/(double)width)-0.5
+                   ,height[i]);
+        glEnd();
+    }
+}
 
 Face* Mesh::faceDebut(){
     return &faces[0];

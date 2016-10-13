@@ -131,9 +131,7 @@ void Terrain::display(){
         glBegin(GL_POINTS);
         glVertex3f((((double)i/(double)lenght)/(double)lenght)-0.5
                    ,((double)(i%lenght)/(double)width)-0.5
-                   //,((double)height[i]/(double)255)-0.5);
                    ,height[i]);
-        //qDebug()<<"x="<<i/lenght<<" y="<<i%lenght << " z="<<height[i];
         glEnd();
     }
 }
