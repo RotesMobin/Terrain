@@ -13,17 +13,13 @@
 #include <QRgb>
 #include <QColor>
 #include <math.h>
-<<<<<<< HEAD
-#include <mesh.h>
 #include <perlin.h>
-=======
->>>>>>> origin/master
 
 class Terrain
 {
 public:
     Terrain();
-    Terrain(int width,int lenght);
+    Terrain(int width, int lenght);
 
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);

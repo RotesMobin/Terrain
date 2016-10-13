@@ -112,14 +112,9 @@ void Terrain::display()
     for(i = 0; i < height.size(); i++)
     {
         glBegin(GL_POINTS);
-<<<<<<< HEAD
-        glVertex3f((((double)i / (double)lenght)/(double)lenght) - 0.5
-                   , ((double)(i % lenght) / (double)width) - 0.5
-                   //,((double)height[i]/(double)255)-0.5);
-=======
+
         glVertex3f((((double)i/(double)lenght)/(double)lenght)-0.5
                    ,((double)(i%lenght)/(double)width)-0.5
->>>>>>> origin/master
                    ,height[i]);
         glEnd();
     }

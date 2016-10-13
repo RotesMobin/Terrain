@@ -5,7 +5,9 @@
 Mesh::Mesh(){
 
 }
-Mesh::Mesh(Terrain T){
+
+Mesh::Mesh(Terrain T)
+{
     int i=0,j=0;
     int faceInd=0;
     for(i=0;i<T.getWidth();i++){
@@ -17,6 +19,7 @@ Mesh::Mesh(Terrain T){
                 this->faces.append(Face(faceInd,i-1+j-1,i+j-1,i+j));
                 faceInd++;
             }
+
         }
     }
 }

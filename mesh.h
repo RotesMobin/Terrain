@@ -17,7 +17,6 @@ class Mesh
 {
 public:
     Mesh();
-
     Mesh(Terrain T);
 
     //Mesh(Terrain T);
@@ -38,6 +37,7 @@ public:
     Sommet* getSommetAt(int ind);
 
     void saveAsOFF(QString name);
+
 private:
     void drawTriangle(Sommet v1,Sommet v2,Sommet v3);
     QVector<Sommet> sommets;
