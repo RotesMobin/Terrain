@@ -1,6 +1,7 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include <windows.h>
 #include <QObject>
 #include <QVector>
 #include <GL/gl.h>
@@ -18,7 +19,7 @@ class Terrain
 public:
     Terrain();
     Terrain(int width,int lenght);
-    double setHeightAt(int x,int y,double z);
+    void setHeightAt(int x,int y,double z);
     double getHeightAt(int x,int y);
     void generateTerrainFromNoise();
     void loadFromHeightMap(QString name);

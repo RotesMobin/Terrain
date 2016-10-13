@@ -1,6 +1,6 @@
 #include "edge.h"
 
-Edge::edge()
+Edge::Edge()
 {
    nbTr=0;
 }

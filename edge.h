@@ -6,7 +6,7 @@
 class Edge
 {
 public:
-    edge();
+    Edge();
     int getF1();
     int getF2();
     void setF1(int f1);

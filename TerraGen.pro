@@ -31,6 +31,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
+LIBS += -lOpengl32
 install_it.path = $$OUT_PWD/Data
 install_it.files = Data/*
 

@@ -1,6 +1,7 @@
 #ifndef GLDISPLAY_H
 #define GLDISPLAY_H
 
+#include <windows.h>
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <terrain.h>

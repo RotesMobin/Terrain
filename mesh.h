@@ -6,12 +6,13 @@
 #include <QString>
 #include <QFile>
 #include <QTextStream>
-#include <GL/gl.h>
+#include <QDebug>
 #include <face.h>
 #include <edge.h>
 #include <sommet.h>
-#include <QDebug>
 #include <terrain.h>
+
+
 class Mesh
 {
 public:

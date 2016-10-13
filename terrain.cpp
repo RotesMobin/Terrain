@@ -18,7 +18,7 @@ double Terrain::getHeightAt(int x, int y){
         return -1;
     }
 }
-double Terrain::setHeightAt(int x,int y, double z){
+void Terrain::setHeightAt(int x,int y, double z){
     if(height[(y*lenght)+x]){
         height[(y*lenght)+x]=z;
     }
