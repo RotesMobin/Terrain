@@ -50,35 +50,29 @@ void Terrain::setDirtAt(int x, int y, double dirtValue)
     }
 }
 
-void Terrain::generateTerrainFromNoise()
+void Terrain::generateTerrainFromNoise(double Hfreq,double Hamp, double MFreq,double MAmp, double BFreq, double BAmp )
 {
     double i, j;
-    double freq = 2;
-    double amp = 1;
     Perlin perlin = Perlin();
 
     for(i = 0; i < width; i++)
     {
         for(j = 0; j < lenght; j++)
         {
-            height.append(amp * (perlin.noise(i / (width / freq), j / (lenght / freq))));
+            height.append(Hamp * (perlin.noise(i / (width / Hfreq), j / (lenght / Hfreq))));
             //qDebug()<<noise(i,j);
         }
     }
 
-    freq=5;
-    amp=0.1;
     for(i=0;i<width;i++){
         for(j=0;j<lenght;j++){
-            height[(i*lenght)+j]+=amp*(perlin.noise(i/(width/freq),j/(lenght/freq)));
+            height[(i*lenght)+j]+=MAmp*(perlin.noise(i/(width/MFreq),j/(lenght/MFreq)));
             //qDebug()<<noise(i,j);
         }
     }
-    freq=10;
-    amp=0.05;
     for(i=0;i<width;i++){
         for(j=0;j<lenght;j++){
-            height[(i*lenght)+j]+=amp*(perlin.noise(i/(width/freq),j/(lenght/freq)));
+            height[(i*lenght)+j]+=BAmp*(perlin.noise(i/(width/BFreq),j/(lenght/BFreq)));
             //qDebug()<<noise(i,j);
         }
     }

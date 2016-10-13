@@ -22,7 +22,7 @@ void GLDisplay::initializeGL()
     glColor3f(1.0, 1.0, 0.0);
 
     terrain=Terrain(512,512);
-    terrain.generateTerrainFromNoise();
+    terrain.generateTerrainFromNoise(2,1,5,0.1,10,0.05);
     m=Mesh(terrain);
     m.saveAsObj();
 
