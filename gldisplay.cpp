@@ -22,8 +22,10 @@ void GLDisplay::initializeGL()
     glColor3f(1.0, 1.0, 0.0);
 
     terrain=Terrain(512,512);
-    terrain.generateTerrainFromNoise();
-    m=Mesh(terrain);
+    //terrain.generateTerrainFromNoise();
+    m=Mesh();
+    m.LoadFromOff("Data/cube.off");
+    m.saveAsObj();
 
     //terrain.loadFromHeightMap("Data/test2.png");
 }
