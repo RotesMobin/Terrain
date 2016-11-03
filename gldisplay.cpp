@@ -7,25 +7,25 @@ GLDisplay::GLDisplay(QWidget *parent) :
     _angleX(0.0f),
     _angleY(0.0f)
 {
+
 }
 
 void GLDisplay::initializeGL()
 {
     glEnable(GL_DEPTH_TEST);
-
     glEnable(GL_CULL_FACE);
-
     glFrontFace(GL_CCW);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     glColor3f(1.0, 1.0, 0.0);
 
-    terrain=Terrain(512,512);
-    terrain.generateTerrainFromNoise(2,1);
-    terrain.generateTerrainFromNoise(5,0.1);
-    terrain.generateTerrainFromNoise(10,0.05);
-    m=Mesh(terrain);
+    terrain = Terrain(512, 512);
+
+    terrain.generateTerrainFromNoise(2, 1);
+    terrain.generateTerrainFromNoise(5, 0.1);
+    terrain.generateTerrainFromNoise(10, 0.05);
+
+    m = Mesh(terrain);
     m.saveAsObj();
 
     //terrain.loadFromHeightMap("Data/test2.png");
@@ -63,9 +63,7 @@ void GLDisplay::mouseMoveEvent(QMouseEvent *event)
         QPoint position = event->pos();
 
         _angleX += (position.x() - _position.x());
-
         _angleY += (position.y() - _position.y());
-
         _position = position;
 
         updateGL();
