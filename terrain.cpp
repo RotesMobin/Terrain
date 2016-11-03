@@ -66,11 +66,10 @@ void Terrain::generateTerrainFromNoise(double Hfreq,double Hamp)
     {
         for(j = 0; j < lenght; j++)
         {
-            height[(i*lenght)+j]+=Hamp * (perlin.noise(i / (width / Hfreq), j / (lenght / Hfreq)));
-            //qDebug()<<noise(i,j);
+            height[(i*lenght)+j]+=Hamp * (perlin.noise(i / Hfreq, j / Hfreq));
         }
     }
-    saveAsImage("map.raw");
+    //saveAsImage("map.raw");
 }
 
 void Terrain::loadFromHeightMap(QString name)
