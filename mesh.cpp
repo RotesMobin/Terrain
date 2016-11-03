@@ -11,15 +11,14 @@ Mesh::Mesh(Terrain T)
     int i=0,j=0;
     int faceInd=0;
     for(i=0;i<T.getWidth();i++){
-        for(j=0;j<T.getLenght();j++){
-            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j))));
+        for(j=0;j<T.getLength();j++){
+            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j)*500)));
             if(j!=0 && i!=0){
-                this->faces.append(Face(faceInd,T.getLenght()*(i-1)+(j-1),T.getLenght()*(i-1)+j,T.getLenght()*i+j));
+                this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*(i-1)+j,T.getLength()*i+j));
                 faceInd++;
-                this->faces.append(Face(faceInd,T.getLenght()*(i-1)+(j-1),T.getLenght()*i+j-1,T.getLenght()*i+j));
+                this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*i+j-1,T.getLength()*i+j));
                 faceInd++;
             }
-
         }
     }
 }
@@ -44,30 +43,30 @@ int Mesh::LoadFromOff(QString fileName){
     int ind_som[3];
     int tr_id=0;
     QFile file(fileName);
-       if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-          return 1;
-       }
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        return 1;
+    }
 
-       QTextStream in(&file);
-       QString line = in.readLine();
-       if(line!="OFF"){
-           printf("Mauvais formatage\n");
-           return 0;
-       }
-       line = in.readLine();
-       QStringList lstLine = line.split(" ");
-       int nbPoints=lstLine.at(0).toInt();
-       int nbFaces=lstLine.at(1).toInt();
+    QTextStream in(&file);
+    QString line = in.readLine();
+    if(line!="OFF"){
+        printf("Mauvais formatage\n");
+        return 0;
+    }
+    line = in.readLine();
+    QStringList lstLine = line.split(" ");
+    int nbPoints=lstLine.at(0).toInt();
+    int nbFaces=lstLine.at(1).toInt();
 
-       while (!in.atEnd())
-       {
-          QString line = in.readLine(); //read one line at a time
-          lstLine = line.split(" ");
-          if(nbPoints>0){
+    while (!in.atEnd())
+    {
+        QString line = in.readLine(); //read one line at a time
+        lstLine = line.split(" ");
+        if(nbPoints>0){
             sommets.append(Sommet(QVector3D(lstLine.at(0).toFloat(),lstLine.at(1).toFloat(),lstLine.at(2).toFloat())));
             nbPoints--;
-          }
-          else if(nbFaces>0){
+        }
+        else if(nbFaces>0){
             ind_som[0]=lstLine.at(1).toInt();
             ind_som[1]=lstLine.at(2).toInt();
             ind_som[2]=lstLine.at(3).toInt();
@@ -101,10 +100,10 @@ int Mesh::LoadFromOff(QString fileName){
             }
             tr_id++;
             nbFaces--;
-          }
-       }
-       file.close();
-       return 0;
+        }
+    }
+    file.close();
+    return 0;
 }
 
 
@@ -145,9 +144,9 @@ void Mesh::drawPoint(){
 }
 void Mesh::drawTriangle(Sommet v1,Sommet v2,Sommet v3)
 {
-        glVertex3f(v1.getPoint().x(),v1.getPoint().y(),v1.getPoint().z());
-        glVertex3f(v2.getPoint().x(),v2.getPoint().y(),v2.getPoint().z());
-        glVertex3f(v3.getPoint().x(),v3.getPoint().y(),v3.getPoint().z());
+    glVertex3f(v1.getPoint().x(),v1.getPoint().y(),v1.getPoint().z());
+    glVertex3f(v2.getPoint().x(),v2.getPoint().y(),v2.getPoint().z());
+    glVertex3f(v3.getPoint().x(),v3.getPoint().y(),v3.getPoint().z());
 }
 
 void Mesh::saveAsOFF(QString name){
