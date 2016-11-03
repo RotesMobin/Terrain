@@ -19,26 +19,29 @@ class Terrain
 {
 public:
     Terrain();
-    Terrain(int width, int lenght);
+    Terrain(int width, int length);
 
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);
     void setDirtAt(int x, int y, double dirtValue);
-    void generateTerrainFromNoise(double Hfreq,double Hamp);
+    void generateTerrainFromNoise(double freq, double amp);
     double getHeightAt(int x, int y);
     double getDirtAt(int x, int y);
-    int getLenght();
+    int getLength();
     int getWidth();
 
     void drawTriangle(QVector3D v1, QVector3D v2, QVector3D v3);
     void saveAsImage(QString name);
     void display();
+    void erode();
 
 private:
     QVector<double> height;
     QVector<double> dirt;
     int width;
-    int lenght;
+    int length;
+
+    int* V8(int x, int y);
 };
 
 #endif // TERRAIN_H
