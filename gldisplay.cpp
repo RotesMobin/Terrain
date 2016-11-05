@@ -21,10 +21,12 @@ void GLDisplay::initializeGL()
 
     terrain = Terrain(512, 512);
 
-    terrain.generateTerrainFromNoise(2, 1);
-    terrain.generateTerrainFromNoise(5, 0.1);
-    terrain.generateTerrainFromNoise(10, 0.05);
-
+    terrain.generateTerrainFromNoise(2, 250,500,false);
+    terrain.generateTerrainFromNoise(3, 50,500,true);
+    terrain.generateTerrainFromNoise(5, 20,500,true);
+    terrain.generateTerrainFromNoise(15, 10,500,true);
+    terrain.generateTerrainFromNoise(50, 3,500,true);
+    terrain.generateTerrainFromNoise(150, 1,500,true);
     m = Mesh(terrain);
     m.saveAsObj();
 

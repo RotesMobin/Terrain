@@ -58,17 +58,27 @@ void Terrain::setDirtAt(int x, int y, double dirtValue)
     }
 }
 
-void Terrain::generateTerrainFromNoise(double freq, double amp)
+void Terrain::generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge)
 {
     double i, j;
+    double h;
     Perlin perlin = Perlin();
 
     for(i = 0; i < width; i++)
     {
         for(j = 0; j < length; j++)
         {
-            height[(i*length)+j] += amp * (perlin.noise(i / (width / freq), j / (length / freq)));
-            //qDebug() << height[(i*lenght)+j];
+            h=amp * (perlin.noise(i*freq /width , j*freq /length ));
+            if(ridge){
+                if(h>amp/4){
+                    height[(i*length)+j] -= (h-amp/4)*2;
+                }
+                if(h<(-amp/4)){
+                    height[(i*length)+j] -= (h+amp/4)*2;
+                }
+            }
+            height[(i*length)+j] += h;
+
         }
     }
     saveAsImage("map.raw");

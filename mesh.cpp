@@ -12,7 +12,7 @@ Mesh::Mesh(Terrain T)
     int faceInd=0;
     for(i=0;i<T.getWidth();i++){
         for(j=0;j<T.getLength();j++){
-            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j)*500)));
+            this->sommets.append(Sommet(QVector3D(i,j,T.getHeightAt(i,j))));
             if(j!=0 && i!=0){
                 this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*(i-1)+j,T.getLength()*i+j));
                 faceInd++;
@@ -22,6 +22,7 @@ Mesh::Mesh(Terrain T)
         }
     }
 }
+
 void Mesh::saveAsObj(){
     QFile file("Terrain.obj");
     file.open(QIODevice::WriteOnly);

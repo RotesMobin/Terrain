@@ -9,8 +9,7 @@ Perlin::Perlin()
 
 double Perlin::noise(double x, double y)
 {
-    float unit = 1.0 / sqrt(2);
-    QVector2D gradient2[8] = {{unit,unit},{-unit,unit},{unit,-unit},{-unit,-unit},
+    QVector2D gradient2[8] = {{1,1},{-1,1},{1,-1},{-1,-1},
                        {1,0}, {-1,0}, {0,1}, {0,-1}};
 
     // On fait un masquage, ii et jj sont compris entre 0 et 255
@@ -21,8 +20,8 @@ double Perlin::noise(double x, double y)
     int x1 = x0 + 1;
     int y1 = y0 + 1;
 
-    int ii = x0 % 125;
-    int jj = y0 % 125;
+    int ii = x0 % 256;
+    int jj = y0 % 256;
 
 
 
