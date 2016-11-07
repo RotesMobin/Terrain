@@ -27,6 +27,10 @@ void GLDisplay::initializeGL()
     terrain.generateTerrainFromNoise(15, 10,500,true);
     terrain.generateTerrainFromNoise(50, 3,500,true);
     terrain.generateTerrainFromNoise(150, 1,500,true);
+
+    terrain.initializeDirt();
+    terrain.erode();
+
     m = Mesh(terrain);
     m.saveAsObj();
 
@@ -43,7 +47,7 @@ void GLDisplay::paintGL()
     glRotatef(_angleY, 1.0f, 0.0f, 0.0f);
     //resizeGL(terrain.getWidth(),terrain.getLenght());
     //terrain.display();
-    m.draw();
+    //m.draw();
 }
 
 void GLDisplay::resizeGL(int w, int h)

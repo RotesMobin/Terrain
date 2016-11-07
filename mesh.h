@@ -17,7 +17,7 @@ class Mesh
 {
 public:
     Mesh();
-    Mesh(Terrain T);
+    Mesh(Terrain &T);
 
     //Mesh(Terrain T);
     void saveAsObj();

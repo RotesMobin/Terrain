@@ -34,10 +34,12 @@ public:
     void saveAsImage(QString name);
     void display();
     void erode();
+    void initializeDirt();
 
-private:
     QVector<double> height;
     QVector<double> dirt;
+private:
+
     int width;
     int length;
 

@@ -5,24 +5,26 @@ Terrain::Terrain()
 
 }
 
-Terrain::Terrain(int width, int length)
+Terrain::Terrain(int length, int width)
 {
     this->width = width;
     this->length = length;
+
     for(int i = 0; i < width; i++)
     {
         for(int j = 0; j < length; j++)
         {
             height.append(0);
+            dirt.append(0);
         }
     }
 }
 
 double Terrain::getHeightAt(int x, int y)
 {
-    if(height[(y * length) + x])
+    if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        return height[(y * length) + x];
+        return height[(y * width) + x];
     }
     else
     {
@@ -32,9 +34,9 @@ double Terrain::getHeightAt(int x, int y)
 
 double Terrain::getDirtAt(int x, int y)
 {
-    if(dirt[(y * length) + x])
+    if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        return dirt[(y * length) + x];
+        return dirt[(y * width) + x];
     }
     else
     {
@@ -44,17 +46,17 @@ double Terrain::getDirtAt(int x, int y)
 
 void Terrain::setHeightAt(int x, int y, double z)
 {
-    if(height[(y * length) + x])
+    if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        height[(y * length) + x] = z;
+        height[(y * width) + x] = z;
     }
 }
 
 void Terrain::setDirtAt(int x, int y, double dirtValue)
 {
-    if(dirt[(y * length) + x])
+    if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        dirt[(y * length) + x] = dirtValue;
+        dirt[(y * width) + x] = dirtValue;
     }
 }
 
@@ -71,17 +73,17 @@ void Terrain::generateTerrainFromNoise(double freq, double amp, double nbPoints,
             h=amp * (perlin.noise(i*freq /width , j*freq /length ));
             if(ridge){
                 if(h>amp/4){
-                    height[(i*length)+j] -= (h-amp/4)*2;
+                    height[(j*width)+i] -= (h-amp/4)*2;
                 }
                 if(h<(-amp/4)){
-                    height[(i*length)+j] -= (h+amp/4)*2;
+                    height[(j*width)+i] -= (h+amp/4)*2;
                 }
             }
-            height[(i*length)+j] += h;
+            height[(j*width)+i] += h;
 
         }
     }
-    saveAsImage("map.raw");
+    //saveAsImage("map.raw");
 }
 
 void Terrain::loadFromHeightMap(QString name)
@@ -153,6 +155,20 @@ void Terrain::erode()
     }
 }
 
+void Terrain::initializeDirt()
+{
+    double max = *std::max_element(height.constBegin(), height.constEnd());
+    double baseDirtValue = max / 10;
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            setDirtAt(i, j, baseDirtValue);
+        }
+    }
+}
+
 int Terrain::getLength()
 {
     return length;
@@ -166,7 +182,7 @@ int* Terrain::V8(int x, int y)
 {
     int ret[8];
 
-    if (x + 1 < width)
+    if (x + 1 < length)
     {
         ret[0] = getHeightAt(x + 1, y);
     }
@@ -181,7 +197,7 @@ int* Terrain::V8(int x, int y)
         ret[6] = getHeightAt(x, y - 1);
     }
 
-    if (y + 1 < length)
+    if (y + 1 < width)
     {
         ret[2] = getHeightAt(x, y + 1);
     }
@@ -191,17 +207,17 @@ int* Terrain::V8(int x, int y)
         ret[5] = getHeightAt(x - 1, y - 1);
     }
 
-    if (x + 1 < width && y > 0)
+    if (x + 1 < length && y > 0)
     {
         ret[7] = getHeightAt(x + 1, y - 1);
     }
 
-    if (y + 1 < length && x > 0)
+    if (y + 1 < width && x > 0)
     {
         ret[3] = getHeightAt(x - 1, y + 1);
     }
 
-    if (y + 1 < length && x + 1 < width)
+    if (y + 1 < width && x + 1 < length)
     {
         ret[1] = getHeightAt(x + 1, y + 1);
     }
