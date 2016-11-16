@@ -19,14 +19,14 @@ void GLDisplay::initializeGL()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glColor3f(1.0, 1.0, 0.0);
 
-    terrain = Terrain(512, 512);
+    terrain = Terrain(512, 512,512,512);
 
-    terrain.generateTerrainFromNoise(2, 250,500,false);
-    terrain.generateTerrainFromNoise(3, 50,500,true);
-    terrain.generateTerrainFromNoise(5, 20,500,true);
-    terrain.generateTerrainFromNoise(15, 10,500,true);
-    terrain.generateTerrainFromNoise(50, 3,500,true);
-    terrain.generateTerrainFromNoise(150, 1,500,true);
+    terrain.generateTerrainFromNoise(2, 250,100,false);
+    terrain.generateTerrainFromNoise(3, 50,100,true);
+    terrain.generateTerrainFromNoise(5, 20,100,true);
+    terrain.generateTerrainFromNoise(15, 10,100,true);
+    terrain.generateTerrainFromNoise(50, 3,100,true);
+    terrain.generateTerrainFromNoise(150, 1,100,true);
 
     terrain.initializeDirt();
     terrain.erode();

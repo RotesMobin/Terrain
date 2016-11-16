@@ -5,7 +5,7 @@ Terrain::Terrain()
 
 }
 
-Terrain::Terrain(int length, int width)
+Terrain::Terrain(int length, int width, int nbPointWidth, int nbPointLength)
 {
     this->width = width;
     this->length = length;
@@ -96,17 +96,18 @@ void Terrain::setDirtAt(int x, int y, double dirtValue)
     }
 }
 
-void Terrain::generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge)
+void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolean ridge)
 {
     double i, j;
     double h;
+    int periode = 500;
     Perlin perlin = Perlin();
 
     for(i = 0; i < width; i++)
     {
         for(j = 0; j < length; j++)
         {
-            h=amp * (perlin.noise(i*freq /width , j*freq /length ));
+            h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode ));
             if(ridge){
                 if(h>amp/4){
                     height[(j*width)+i] -= (h-amp/4)*2;
