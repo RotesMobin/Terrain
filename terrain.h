@@ -19,12 +19,12 @@ class Terrain
 {
 public:
     Terrain();
-    Terrain(int width, int length);
+    Terrain(int width, int length, int nbPointWidth, int nbPointLength);
 
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);
     void setDirtAt(int x, int y, double dirtValue);
-    void generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge);
+    void generateTerrainFromNoise(double freq, double amp,int start, boolean ridge);
     double getHeightAt(int x, int y);
     double getDirtAt(int x, int y);
     int getLength();

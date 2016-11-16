@@ -14,7 +14,7 @@ Mesh::Mesh(Terrain &T)
         for(j=0;j<T.getLength();j++){
             this->sommets.append(Sommet(QVector3D(i, j, T.getHeightAt(i,j) + T.getDirtAt(i, j))));
             if(j!=0 && i!=0){
-                this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*(i-1)+j,T.getLength()*i+j));
+                this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*i+j,T.getLength()*(i-1)+j));
                 faceInd++;
                 this->faces.append(Face(faceInd,T.getLength()*(i-1)+(j-1),T.getLength()*i+j-1,T.getLength()*i+j));
                 faceInd++;
