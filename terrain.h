@@ -24,9 +24,13 @@ public:
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);
     void setDirtAt(int x, int y, double dirtValue);
+    void setTemperAt(int x, int y,double value);
+    void setGradAt(int x, int y, QVector3D value);
     void generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge);
     double getHeightAt(int x, int y);
     double getDirtAt(int x, int y);
+    double getTemperAt(int x, int y);
+    QVector3D getGradAt(int x,int y);
     int getLength();
     int getWidth();
 
@@ -35,9 +39,11 @@ public:
     void display();
     void erode();
     void initializeDirt();
-
+    void initGradTemper();
     QVector<double> height;
     QVector<double> dirt;
+    QVector<double> temper;
+    QVector<QVector3D> grad;
 private:
 
     int width;

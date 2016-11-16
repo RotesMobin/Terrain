@@ -44,6 +44,42 @@ double Terrain::getDirtAt(int x, int y)
     }
 }
 
+double Terrain::getTemperAt(int x, int y){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        return temper[(y * width) + x];
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+QVector3D Terrain::getGradAt(int x, int y){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        return grad[(y * width) + x];
+    }
+    else
+    {
+        return std::nullptr_t;
+    }
+}
+
+void Terrain::setGradAt(int x, int y,QVector3D value){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        grad[(y * width) + x] = value;
+    }
+}
+
+void Terrain::setTemperAt(int x, int y,double value){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        temper[(y * width) + x] = value;
+    }
+}
+
 void Terrain::setHeightAt(int x, int y, double z)
 {
     if(x >= 0 && y >= 0 && x < width && y < length)
@@ -152,6 +188,16 @@ void Terrain::erode()
         }
 
         ite++;
+    }
+}
+
+void Terrain::initGradTemper(){
+    double z;
+    for(int i=0;i<width;i++){
+        for(int j=0;j<length;j++){
+            z=getHeightAt(i,j);
+
+        }
     }
 }
 
