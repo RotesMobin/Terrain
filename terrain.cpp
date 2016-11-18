@@ -62,7 +62,7 @@ QVector3D Terrain::getGradAt(int x, int y){
     }
     else
     {
-        return std::nullptr_t;
+        return QVector3D();
     }
 }
 
@@ -107,7 +107,8 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
     {
         for(j = 0; j < length; j++)
         {
-            h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode ));
+            double n[3];
+            h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode ,n));
             if(ridge){
                 if(h>amp/4){
                     height[(j*width)+i] -= (h-amp/4)*2;
@@ -117,7 +118,6 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
                 }
             }
             height[(j*width)+i] += h;
-
         }
     }
     //saveAsImage("map.raw");

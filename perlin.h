@@ -6,7 +6,11 @@ class Perlin
 {
 public:
     Perlin();
-    double noise(double x, double y);
+    double noise(double x, double y,double* n);
+    double noiseDf(double x, double y);
+    double quintic_poly(const double t);
+    double cubic_poly(const double t);
+    int RandomGrad(int i, int j);
 
 private:
     int permtable[512] =
