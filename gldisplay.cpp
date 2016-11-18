@@ -32,7 +32,7 @@ void GLDisplay::initializeGL()
     terrain.erode();
 
     m = Mesh(terrain);
-    m.saveAsObj();
+    m.saveAsObj(terrain);
 
     //terrain.loadFromHeightMap("Data/test2.png");
 }

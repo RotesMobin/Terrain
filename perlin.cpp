@@ -10,7 +10,7 @@ double Perlin::cubic_poly(const double t)
 {
     return 3*std::pow(t,2)-2*pow(t,3);
 }
-double quintic_poly(const double t)
+double Perlin::quintic_poly(const double t)
 {
     const double t3 = t * t * t;
     return t3 * (t * (t * 6. - 15.) + 10.);
@@ -62,8 +62,7 @@ double Perlin::noise(double x, double y, double* n)
     double u = QVector2D::dotProduct(grad4, p4);
 
     double tmp = x - x0;
-    double du= 30*tmp*tmp*(tmp*(tmp-2)+1);
-    double Cx = cubic_poly(tmp);
+    double Cx = quintic_poly(tmp);
 
 
     double Li1 = s + Cx*(t-s);
@@ -72,12 +71,8 @@ double Perlin::noise(double x, double y, double* n)
 
 
     tmp = y - y0;
-    double dv= 30*tmp*tmp*(tmp*(tmp-2)+1);
 
-    double Cy = cubic_poly(tmp);
-    const float k0 =   s;
-    const float k1 =   t - s;
-    const float k2 =   v - s;
-    const float k4 =   s - t - v + u;
+    double Cy = quintic_poly(tmp);
+
     return Li1 + Cy*(Li2 - Li1);
 }

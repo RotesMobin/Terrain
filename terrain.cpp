@@ -16,6 +16,7 @@ Terrain::Terrain(int length, int width, int nbPointWidth, int nbPointLength)
         {
             height.append(0);
             dirt.append(0);
+            norm.append(QVector3D());
         }
     }
 }
@@ -55,10 +56,10 @@ double Terrain::getTemperAt(int x, int y){
     }
 }
 
-QVector3D Terrain::getGradAt(int x, int y){
+QVector3D Terrain::getNormAt(int x, int y){
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        return grad[(y * width) + x];
+        return norm[(y * width) + x];
     }
     else
     {
@@ -66,10 +67,10 @@ QVector3D Terrain::getGradAt(int x, int y){
     }
 }
 
-void Terrain::setGradAt(int x, int y,QVector3D value){
+void Terrain::setNormAt(int x, int y,QVector3D value){
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
-        grad[(y * width) + x] = value;
+        norm[(y * width) + x] = value;
     }
 }
 
@@ -120,6 +121,7 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
             height[(j*width)+i] += h;
         }
     }
+    initGradTemper();
     //saveAsImage("map.raw");
 }
 
@@ -193,10 +195,19 @@ void Terrain::erode()
 }
 
 void Terrain::initGradTemper(){
-    double z;
+    double z,zx1,zx0,zy1,zy0,dx,dy;
     for(int i=0;i<width;i++){
         for(int j=0;j<length;j++){
             z=getHeightAt(i,j);
+            if(i+1<width&&i-1>0&&j+1<length&&j-1>0){
+                zx1=getHeightAt(i+1,j);
+                zx0=getHeightAt(i-1,j);
+                zy1=getHeightAt(i,j+1);
+                zy0= getHeightAt(i,j-1);
+                dx=(zx1-zx0)/2;
+                dy=(zy1-zy0)/2;
+                setNormAt(i,j,QVector3D(-dx,-dy,1));
+           }
 
         }
     }

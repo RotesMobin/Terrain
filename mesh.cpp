@@ -23,7 +23,7 @@ Mesh::Mesh(Terrain &T)
     }
 }
 
-void Mesh::saveAsObj(){
+void Mesh::saveAsObj(Terrain obj){
     QFile file("Terrain.obj");
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
@@ -32,8 +32,13 @@ void Mesh::saveAsObj(){
         out<<"v "<<sommets[i].getPoint().x()<<" "<<sommets[i].getPoint().y()<<" "<<sommets[i].getPoint().z()<<"\n";
     }
     out<<"\n";
+    for(int i=0;i<obj.norm.size();i++){
+        out<<"vn "<<obj.norm[i].x()<<" "<<obj.norm[i].y()<<" "<<obj.norm[i].z()<<"\n";
+    }
+    out<<"\n";
     for(int i=0;i<faces.size();i++){
-        out<<"f "<<faces[i].getS1()+1<<"// "<<faces[i].getS2()+1<<"// "<<faces[i].getS3()+1<<"//\n";
+        out<<"f "<<faces[i].getS1()+1<<"//"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"//"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"//"<<faces[i].getS3()+1<<"\n";
+
     }
     file.close();
 }
