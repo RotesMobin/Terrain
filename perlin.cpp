@@ -6,11 +6,11 @@ Perlin::Perlin()
 {
 
 }
-double Perlin:quintic_poly(const double t)
+double Perlin::cubic_poly(const double t)
 {
     return 3*std::pow(t,2)-2*pow(t,3);
 }
-double cubic_poly(const double t)
+double quintic_poly(const double t)
 {
     const double t3 = t * t * t;
     return t3 * (t * (t * 6. - 15.) + 10.);
