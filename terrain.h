@@ -40,6 +40,7 @@ public:
     void display();
     void erode();
     void initializeDirt();
+    void initializeSlope();
     void initGradTemper();
     QVector<double> height;
     QVector<double> dirt;

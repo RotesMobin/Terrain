@@ -213,6 +213,50 @@ void Terrain::initGradTemper(){
     }
 }
 
+void Terrain::initializeSlope()
+{
+    int* v8 = {0};
+    double slope, temp;
+    slope = temp = 0;
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            v8 = this->V8(i, j);
+
+            for(int s = 0; s < 8; s++)
+            {
+                if(v8[s] - this->getHeightAt(i, j) > temp)
+                {
+                    temp = v8[s];
+                }
+            }
+        }
+    }
+}
+{
+    int* v8 = {0};
+    double slope, temp;
+    slope = temp = 0;
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            v8 = this->V8(i, j);
+
+            for(int s = 0; s < 8; s++)
+            {
+                if(v8[s] - this->getHeightAt(i, j) > temp)
+                {
+                    temp = v8[s];
+                }
+            }
+        }
+    }
+}
+
 void Terrain::initializeDirt()
 {
     double max = *std::max_element(height.constBegin(), height.constEnd());
