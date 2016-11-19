@@ -17,6 +17,7 @@ Terrain::Terrain(int length, int width, int nbPointWidth, int nbPointLength)
             height.append(0);
             dirt.append(0);
             norm.append(QVector3D());
+            avgSlope.append(0);
         }
     }
 }
@@ -45,7 +46,8 @@ double Terrain::getDirtAt(int x, int y)
     }
 }
 
-double Terrain::getTemperAt(int x, int y){
+double Terrain::getTemperAt(int x, int y)
+{
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
         return temper[(y * width) + x];
@@ -56,7 +58,8 @@ double Terrain::getTemperAt(int x, int y){
     }
 }
 
-QVector3D Terrain::getNormAt(int x, int y){
+QVector3D Terrain::getNormAt(int x, int y)
+{
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
         return norm[(y * width) + x];
@@ -67,14 +70,28 @@ QVector3D Terrain::getNormAt(int x, int y){
     }
 }
 
-void Terrain::setNormAt(int x, int y,QVector3D value){
+double Terrain::getAvgSlope(int x, int y)
+{
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        return avgSlope[(y * width) + x];
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+void Terrain::setNormAt(int x, int y,QVector3D value)
+{
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
         norm[(y * width) + x] = value;
     }
 }
 
-void Terrain::setTemperAt(int x, int y,double value){
+void Terrain::setTemperAt(int x, int y,double value)
+{
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
         temper[(y * width) + x] = value;
@@ -94,6 +111,14 @@ void Terrain::setDirtAt(int x, int y, double dirtValue)
     if(x >= 0 && y >= 0 && x < width && y < length)
     {
         dirt[(y * width) + x] = dirtValue;
+    }
+}
+
+void Terrain::setAvgSlope(int x, int y, double value)
+{
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        avgSlope[(y * width) + x] = value;
     }
 }
 
@@ -215,25 +240,47 @@ void Terrain::initGradTemper(){
 
 void Terrain::initializeSlope()
 {
-    int* v8 = {0};
+    int count = 0;
+    double* v8;
     double slope, temp;
     slope = temp = 0;
 
-    /*for(int i = 0; i < width; i++)
+    for(int i = 0; i < width; i++)
     {
         for(int j = 0; j < length; j++)
         {
-            v8 = this->V8(i, j);
+            v8 = V8(i, j);
+            count = 0;
+            temp = 0;
 
             for(int s = 0; s < 8; s++)
             {
-                if(v8[s] - this->getHeightAt(i, j) > temp)
+                if(v8[s] != 0)
                 {
-                    temp = v8[s];
+                    temp += abs(v8[s]);
+                    count++;
                 }
             }
+
+            setAvgSlope(i, j, temp / count);
         }
-    }*/
+    }
+
+    int gray, val;
+    QImage map = QImage(width, length, QImage::Format_RGB32);
+    double max = *std::max_element(height.constBegin(), height.constEnd());
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            val = (int)getAvgSlope(i, j) / max * 255;
+            gray = qGray(val, val, val);
+            map.setPixel(i, j, qRgb(gray, gray, gray));
+        }
+    }
+
+    qDebug()<<map.save("SlopeMap.png");
 }
 
 void Terrain::initializeDirt()
@@ -259,9 +306,14 @@ int Terrain::getWidth()
     return width;
 }
 
-int* Terrain::V8(int x, int y)
+double* Terrain::V8(int x, int y)
 {
-    int ret[8];
+    double* ret = new double[8];
+
+    for(int i = 0; i < 8; i++)
+    {
+        ret[i] = 0;
+    }
 
     if (x + 1 < length)
     {
@@ -303,5 +355,5 @@ int* Terrain::V8(int x, int y)
         ret[1] = getHeightAt(x + 1, y + 1);
     }
 
-    return &ret[0];
+    return ret;
 }
