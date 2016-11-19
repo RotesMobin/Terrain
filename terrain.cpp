@@ -219,7 +219,7 @@ void Terrain::initializeSlope()
     double slope, temp;
     slope = temp = 0;
 
-    for(int i = 0; i < width; i++)
+    /*for(int i = 0; i < width; i++)
     {
         for(int j = 0; j < length; j++)
         {
@@ -233,7 +233,7 @@ void Terrain::initializeSlope()
                 }
             }
         }
-    }
+    }*/
 }
 
 void Terrain::initializeDirt()
