@@ -201,22 +201,32 @@ void Terrain::saveAsImage(QString name)
 
 void Terrain::erode()
 {
-    int ite = 0;
+    int ite, rand;
+    double* v8;
+    ite = rand = 0;
 
-    while(ite < 10000)
+    /*while(ite < 10000)
     {
         for(int i = 0; i < width; i++)
         {
             for(int j = 0; j < length; j++)
             {
+                if(qrand() % 100 + 1 )
                 // Erosion Th
+                v8 = V8(i, j);
 
-                // Mouvement Dirt
+                for(int s = 0; s < 8; s++)
+                {
+                    if(v8[s] != 0)
+                    {
+
+                    }
+                }
             }
         }
 
         ite++;
-    }
+    }*/
 }
 
 void Terrain::initGradTemper(){
