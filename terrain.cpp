@@ -82,6 +82,24 @@ double Terrain::getAvgSlope(int x, int y)
     }
 }
 
+vegetation Terrain::getVeget(int x,int y){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        return veget[(y * width) + x];
+    }
+    else
+    {
+        return vegetation();
+    }
+}
+
+void Terrain::setVeget(int x, int y, vegetation value){
+    if(x >= 0 && y >= 0 && x < width && y < length)
+    {
+        veget[(y * width) + x] = value;
+    }
+}
+
 void Terrain::setNormAt(int x, int y,QVector3D value)
 {
     if(x >= 0 && y >= 0 && x < width && y < length)
@@ -146,7 +164,6 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
             height[(j*width)+i] += h;
         }
     }
-    initGradTemper();
     //saveAsImage("map.raw");
 }
 
@@ -228,8 +245,49 @@ void Terrain::erode()
         ite++;
     }*/
 }
+void Terrain::initVeget(int nbveget, int nbCycles){
+    veget= QVector<vegetation>();
+    srand (time(NULL));
+    //randp.min()
+    int x,y,type;
+    for (int t=0;t<nbveget;t++){
+        x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width-0)));
+        y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length-0)));
+        type= 1 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(2-1)));
+        vegetation toAdd=vegetation(type,x,y);;
+        if(!checkVeget(toAdd.x,toAdd.y)){
+            if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
+                veget.append(toAdd);
+            }
+        }
+    }
 
-void Terrain::initGradTemper(){
+
+}
+
+void Terrain::drawVeget(){
+    QPixmap* map=new QPixmap(width,length);
+    QPainter painter;
+    painter.begin(map);
+    painter.setPen(QColor("red"));
+    for(int i=0;i<veget.count();i++){
+        painter.drawEllipse(QPoint(veget[i].x,veget[i].y),veget[i].rayon,veget[i].rayon);
+    }
+    map->save("Veget.png");
+    painter.end();
+    delete map;
+}
+
+bool Terrain::checkVeget(int x, int y){
+    for(int i=0;i<veget.count();i++){
+        if(veget[i].x==x&&veget[i].y==y){
+            return true;
+        }
+    }
+    return false;
+}
+
+void Terrain::initNormal(){
     double z,zx1,zx0,zy1,zy0,dx,dy;
     for(int i=0;i<width;i++){
         for(int j=0;j<length;j++){

@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     face.cpp \
     mesh.cpp \
     sommet.cpp \
-    perlin.cpp
+    perlin.cpp \
+    vegetation.cpp
 
 HEADERS  += mainwindow.h \
     gldisplay.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     face.h \
     mesh.h \
     sommet.h \
-    perlin.h
+    perlin.h \
+    vegetation.h
 
 FORMS    += mainwindow.ui
 

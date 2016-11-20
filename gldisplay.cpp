@@ -27,11 +27,12 @@ void GLDisplay::initializeGL()
     terrain.generateTerrainFromNoise(15, 10,100,true);
     terrain.generateTerrainFromNoise(50, 3,100,true);
     terrain.generateTerrainFromNoise(150, 1,100,true);
-
     terrain.initializeSlope();
     terrain.initializeDirt();
     terrain.erode();
-
+    terrain.initNormal();
+    terrain.initVeget(300,2);
+    terrain.drawVeget();
     m = Mesh(terrain);
     m.saveAsObj(terrain);
 

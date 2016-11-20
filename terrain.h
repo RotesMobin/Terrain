@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #include <QImage>
 #include <QPixmap>
+#include <QPainter>
 #include <QDebug>
 #include <QVector3D>
 #include <QVector2D>
@@ -14,6 +15,8 @@
 #include <QColor>
 #include <math.h>
 #include <perlin.h>
+#include <ctime>
+#include <vegetation.h>
 
 class Terrain
 {
@@ -27,6 +30,7 @@ public:
     void setTemperAt(int x, int y,double value);
     void setNormAt(int x, int y, QVector3D value);
     void setAvgSlope(int x, int y, double value);
+    void setVeget(int x,int y, vegetation value);
 
     void generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge);
     void generateTerrainFromNoise(double freq, double amp,int start, boolean ridge);
@@ -36,7 +40,8 @@ public:
     double getTemperAt(int x, int y);
     QVector3D getNormAt(int x,int y);
     double getAvgSlope(int x, int y);
-
+    vegetation getVeget(int x,int y);
+    bool checkVeget(int x, int y);
     int getLength();
     int getWidth();
 
@@ -47,12 +52,15 @@ public:
     void erode();
     void initializeDirt();
     void initializeSlope();
-    void initGradTemper();
+    void initNormal();
+    void initVeget(int nbveget,int nbCycles);
+    void drawVeget();
 
     QVector<double> height;
     QVector<double> dirt;
     QVector<double> temper;
     QVector<double> avgSlope;
+    QVector<vegetation> veget;
     QVector<QVector3D> norm;
 private:
 
