@@ -6,7 +6,7 @@ class Perlin
 {
 public:
     Perlin();
-    double noise(double x, double y,double* n);
+    double noise(double x, double y);
     double noiseDf(double x, double y);
     double quintic_poly(const double t);
     double cubic_poly(const double t);

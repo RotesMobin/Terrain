@@ -8,7 +8,7 @@ Perlin::Perlin()
 }
 double Perlin::cubic_poly(const double t)
 {
-    return 3*std::pow(t,2)-2*pow(t,3);
+    return 3*pow(t,2)-2*pow(t,3);
 }
 double Perlin::quintic_poly(const double t)
 {
@@ -20,7 +20,7 @@ int Perlin::RandomGrad(int i, int j){
     return permtable[i + permtable[j]] % 8;
 }
 
-double Perlin::noise(double x, double y, double* n)
+double Perlin::noise(double x, double y)
 {
     QVector2D gradient2[8] = {{1,1},{-1,1},{1,-1},{-1,-1},
                        {1,0}, {-1,0}, {0,1}, {0,-1}};
