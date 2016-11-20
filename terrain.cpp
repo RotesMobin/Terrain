@@ -1,4 +1,5 @@
 #include "terrain.h"
+#include <QtMath>
 
 Terrain::Terrain()
 {
@@ -209,9 +210,10 @@ void Terrain::erode()
 {
     int ite, rand;
     QVector3D base, target;
+    double dot, lenSq1, lenSq2, angle;
     double* v8;
 
-    ite = rand = 0;
+    ite = rand = dot = lenSq1 = lenSq2 = angle = 0;
 
     while(ite < 10000)
     {
@@ -232,46 +234,53 @@ void Terrain::erode()
                             {
                                 case 0:
                                     base = QVector3D(1, 0, 0);
-                                    target = QVector3D(1, 0, getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
+                                    target = QVector3D(1, 0, getHeightAt(i + 1, j) + getDirtAt(i + 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 1:
                                     base = QVector3D(1, 1, 0);
-                                    target = QVector3D(1, 1, getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1));
+                                    target = QVector3D(1, 1, getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 2:
                                     base = QVector3D(0, 1, 0);
-                                    target = QVector3D(0, 1, getHeightAt(i, j + 1) + getDirtAt(i, j + 1));
+                                    target = QVector3D(0, 1, getHeightAt(i, j + 1) + getDirtAt(i, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 3:
                                     base = QVector3D(-1, 1, 0);
-                                    target = QVector3D(-1, 1, getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1));
+                                    target = QVector3D(-1, 1, getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 4:
                                     base = QVector3D(-1, 0, 0);
-                                    target = QVector3D(-1, 0, getHeightAt(i - 1, j) + getDirtAt(i - 1, j));
+                                    target = QVector3D(-1, 0, getHeightAt(i - 1, j) + getDirtAt(i - 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 5:
                                     base = QVector3D(-1, -1, 0);
-                                    target = QVector3D(-1, -1, getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1));
+                                    target = QVector3D(-1, -1, getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 6:
                                     base = QVector3D(0, -1, 0);
-                                    target = QVector3D(0, -1, getHeightAt(i, j - 1) + getDirtAt(i, j - 1));
+                                    target = QVector3D(0, -1, getHeightAt(i, j - 1) + getDirtAt(i, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                                 case 7:
                                     base = QVector3D(1, -1, 0);
-                                    target = QVector3D(1, -1, getHeightAt(i + 1, j - 1) + getDirtAt(i + 1, j - 1));
+                                    target = QVector3D(1, -1, getHeightAt(i + 1, j - 1) + getDirtAt(i + 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
                                 break;
 
                             }
 
+                            // Compute angle between base and target vectors in degrees
+                            base.normalize();
+                            target.normalize();
+                            dot = base.dotProduct(base, target);
+                            lenSq1 = base.x() * base.x() + base.y() * base.y() + base.z() * base.z();
+                            lenSq2 = target.x() * target.x() + target.y() * target.y() + target.z() * target.z();
+                            angle = qRadiansToDegrees(acos(dot / sqrt(lenSq1 * lenSq2)));
 
                         }
                     }
