@@ -134,10 +134,9 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
     {
         for(j = 0; j < length; j++)
         {
-            double n[3];
 
-            ridge_val=amp *perlin.noise((i+start+1500)*freq /periode , (j+start+1500)*freq /periode,n );
-            h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode,n ));
+            ridge_val=amp *perlin.noise((i+start+1500)*freq /periode , (j+start+1500)*freq /periode);
+            h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode));
 
             if(ridge){
                 if(h<ridge_val){
