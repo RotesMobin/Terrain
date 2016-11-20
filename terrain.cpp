@@ -65,23 +65,29 @@ void Terrain::generateTerrainFromNoise(double freq, double amp,int start, boolea
     double i, j;
     double h;
     int periode = 500;
+    float ridge_val;
     Perlin perlin = Perlin();
 
     for(i = 0; i < width; i++)
     {
         for(j = 0; j < length; j++)
         {
+            ridge_val=amp *perlin.noise((i+start+1500)*freq /periode , (j+start+1500)*freq /periode );
             h=amp * (perlin.noise((i+start)*freq /periode , (j+start)*freq /periode ));
-            if(ridge){
-                if(h>amp/4){
-                    height[(j*width)+i] -= (h-amp/4)*2;
-                }
-                if(h<(-amp/4)){
-                    height[(j*width)+i] -= (h+amp/4)*2;
-                }
-            }
-            height[(j*width)+i] += h;
 
+            if(ridge){
+                if(h<ridge_val){
+                    //height[(j*width)+i] -= (h-ridge_val)*2;
+                    height[(j*width)+i] += h;
+                }
+                else{
+                    height[(j*width)+i] += ridge_val;
+                }
+
+            }
+            else{
+                height[(j*width)+i] += h;
+            }
         }
     }
     //saveAsImage("map.raw");

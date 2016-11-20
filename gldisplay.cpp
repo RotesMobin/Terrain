@@ -21,7 +21,7 @@ void GLDisplay::initializeGL()
 
     terrain = Terrain(512, 512,512,512);
 
-    terrain.generateTerrainFromNoise(2, 250,100,false);
+    terrain.generateTerrainFromNoise(1, 300,100,true);
     terrain.generateTerrainFromNoise(3, 50,100,true);
     terrain.generateTerrainFromNoise(5, 20,100,true);
     terrain.generateTerrainFromNoise(15, 10,100,true);
