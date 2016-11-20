@@ -208,31 +208,79 @@ void Terrain::saveAsImage(QString name)
 void Terrain::erode()
 {
     int ite, rand;
+    QVector3D base, target;
     double* v8;
+
     ite = rand = 0;
 
-    /*while(ite < 10000)
+    while(ite < 10000)
     {
         for(int i = 0; i < width; i++)
         {
             for(int j = 0; j < length; j++)
             {
-                if(qrand() % 100 + 1 )
-                // Erosion Th
-                v8 = V8(i, j);
-
-                for(int s = 0; s < 8; s++)
+                if(qrand() % 1000 + 1 == 1)
                 {
-                    if(v8[s] != 0)
-                    {
+                    // Erosion Th
+                    v8 = V8(i, j);
 
+                    for(int s = 0; s < 8; s++)
+                    {
+                        if(v8[s] > 0)
+                        {
+                            switch(s)
+                            {
+                                case 0:
+                                    base = QVector3D(1, 0, 0);
+                                    target = QVector3D(1, 0, getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
+                                break;
+
+                                case 1:
+                                    base = QVector3D(1, 1, 0);
+                                    target = QVector3D(1, 1, getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1));
+                                break;
+
+                                case 2:
+                                    base = QVector3D(0, 1, 0);
+                                    target = QVector3D(0, 1, getHeightAt(i, j + 1) + getDirtAt(i, j + 1));
+                                break;
+
+                                case 3:
+                                    base = QVector3D(-1, 1, 0);
+                                    target = QVector3D(-1, 1, getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1));
+                                break;
+
+                                case 4:
+                                    base = QVector3D(-1, 0, 0);
+                                    target = QVector3D(-1, 0, getHeightAt(i - 1, j) + getDirtAt(i - 1, j));
+                                break;
+
+                                case 5:
+                                    base = QVector3D(-1, -1, 0);
+                                    target = QVector3D(-1, -1, getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1));
+                                break;
+
+                                case 6:
+                                    base = QVector3D(0, -1, 0);
+                                    target = QVector3D(0, -1, getHeightAt(i, j - 1) + getDirtAt(i, j - 1));
+                                break;
+
+                                case 7:
+                                    base = QVector3D(1, -1, 0);
+                                    target = QVector3D(1, -1, getHeightAt(i + 1, j - 1) + getDirtAt(i + 1, j - 1));
+                                break;
+
+                            }
+
+
+                        }
                     }
                 }
             }
         }
 
         ite++;
-    }*/
+    }
 }
 
 void Terrain::initGradTemper(){
@@ -261,6 +309,16 @@ void Terrain::initializeSlope()
     double slope, temp;
     slope = temp = 0;
 
+    double min = *std::min_element(height.constBegin(), height.constEnd());
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            setHeightAt(i, j, getHeightAt(i, j) + abs(min));
+        }
+    }
+
     for(int i = 0; i < width; i++)
     {
         for(int j = 0; j < length; j++)
@@ -271,7 +329,7 @@ void Terrain::initializeSlope()
 
             for(int s = 0; s < 8; s++)
             {
-                if(v8[s] != 0)
+                if(v8[s] > 0)
                 {
                     temp += abs(v8[s]);
                     count++;
@@ -292,11 +350,11 @@ void Terrain::initializeSlope()
         {
             val = (int)getAvgSlope(i, j) / max * 255;
             gray = qGray(val, val, val);
-            map.setPixel(i, j, qRgb(gray, gray, gray));
+            map.setPixel(i, j, qRgb(val, 50, 255 - val));
         }
     }
 
-    qDebug()<<map.save("SlopeMap.png");
+    qDebug() << map.save("SlopeMap.png");
 }
 
 void Terrain::initializeDirt()
@@ -308,7 +366,10 @@ void Terrain::initializeDirt()
     {
         for(int j = 0; j < length; j++)
         {
-            setDirtAt(i, j, baseDirtValue);
+            if(j < length / 2)
+                setDirtAt(i, j, 0.3);
+            else
+                setDirtAt(i, j, 0.2);
         }
     }
 }
@@ -333,42 +394,42 @@ double* Terrain::V8(int x, int y)
 
     if (x + 1 < length)
     {
-        ret[0] = getHeightAt(x + 1, y);
+        ret[0] = getHeightAt(x + 1, y) + getDirtAt(x + 1, y);
     }
 
     if (x > 0)
     {
-        ret[4] = getHeightAt(x - 1, y);
+        ret[4] = getHeightAt(x - 1, y) + getDirtAt(x - 1, y);
     }
 
     if (y > 0)
     {
-        ret[6] = getHeightAt(x, y - 1);
+        ret[6] = getHeightAt(x, y - 1) + getDirtAt(x, y - 1);
     }
 
     if (y + 1 < width)
     {
-        ret[2] = getHeightAt(x, y + 1);
+        ret[2] = getHeightAt(x, y + 1) + getDirtAt(x, y + 1);
     }
 
     if (x > 0 && y > 0)
     {
-        ret[5] = getHeightAt(x - 1, y - 1);
+        ret[5] = getHeightAt(x - 1, y - 1) + getDirtAt(x - 1, y - 1);
     }
 
     if (x + 1 < length && y > 0)
     {
-        ret[7] = getHeightAt(x + 1, y - 1);
+        ret[7] = getHeightAt(x + 1, y - 1) + getDirtAt(x + 1, y - 1);
     }
 
     if (y + 1 < width && x > 0)
     {
-        ret[3] = getHeightAt(x - 1, y + 1);
+        ret[3] = getHeightAt(x - 1, y + 1) + getDirtAt(x - 1, y + 1);
     }
 
     if (y + 1 < width && x + 1 < length)
     {
-        ret[1] = getHeightAt(x + 1, y + 1);
+        ret[1] = getHeightAt(x + 1, y + 1) + getDirtAt(x + 1, y + 1);
     }
 
     return ret;
