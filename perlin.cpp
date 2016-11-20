@@ -6,8 +6,21 @@ Perlin::Perlin()
 {
 
 }
+double Perlin::cubic_poly(const double t)
+{
+    return 3*std::pow(t,2)-2*pow(t,3);
+}
+double Perlin::quintic_poly(const double t)
+{
+    const double t3 = t * t * t;
+    return t3 * (t * (t * 6. - 15.) + 10.);
+}
 
-double Perlin::noise(double x, double y)
+int Perlin::RandomGrad(int i, int j){
+    return permtable[i + permtable[j]] % 8;
+}
+
+double Perlin::noise(double x, double y, double* n)
 {
     QVector2D gradient2[8] = {{1,1},{-1,1},{1,-1},{-1,-1},
                        {1,0}, {-1,0}, {0,1}, {0,-1}};
@@ -27,10 +40,10 @@ double Perlin::noise(double x, double y)
 
     // Une manière un peu particulière de créer du désordre
     // Le modulo (%) 8 limite les valeurs de grad1 et grad4 entre 0 et 7
-    int ind_grad1 = permtable[ii + permtable[jj]] % 8;
-    int ind_grad2 = permtable[ii + 1 + permtable[jj ]] % 8;
-    int ind_grad3 = permtable[ii + 1 + permtable[jj+1]] % 8;
-    int ind_grad4 = permtable[ii + permtable[jj + 1]] % 8;
+    int ind_grad1 = RandomGrad(ii,jj);
+    int ind_grad2 = RandomGrad(ii+1,jj);
+    int ind_grad3 = RandomGrad(ii+1,jj+1);
+    int ind_grad4 = RandomGrad(ii,jj+1);
 
     // On récupère simplement les valeurs des vecteurs
     QVector2D grad1 = gradient2[ind_grad1];
@@ -49,8 +62,7 @@ double Perlin::noise(double x, double y)
     double u = QVector2D::dotProduct(grad4, p4);
 
     double tmp = x - x0;
-
-    double Cx = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
+    double Cx = quintic_poly(tmp);
 
 
     double Li1 = s + Cx*(t-s);
@@ -60,8 +72,7 @@ double Perlin::noise(double x, double y)
 
     tmp = y - y0;
 
-    double Cy = 3 * tmp * tmp - 2 * tmp * tmp * tmp;
-
+    double Cy = quintic_poly(tmp);
 
     return Li1 + Cy*(Li2 - Li1);
 }

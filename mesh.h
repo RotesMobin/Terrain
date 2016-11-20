@@ -20,7 +20,7 @@ public:
     Mesh(Terrain &T);
 
     //Mesh(Terrain T);
-    void saveAsObj();
+    void saveAsObj(Terrain obj );
 
     int LoadFromOff(QString fileName);
     void draw();
