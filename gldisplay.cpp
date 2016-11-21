@@ -32,7 +32,7 @@ void GLDisplay::initializeGL()
     terrain.initializeDirt();
     terrain.erode();
     terrain.initNormal();
-    terrain.initVeget(300,2);
+    terrain.initVeget(300,30);
     terrain.drawVeget();
     m = Mesh(terrain);
     m.saveAsObj(terrain);

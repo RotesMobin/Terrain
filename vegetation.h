@@ -7,11 +7,13 @@ class vegetation
     bool hasSurvived=false;
 
 
-    double slopeMax;
     double dirtMin;
     double heightMax;
 public:
+    double age;
+    double ageMax;
     double rayon;
+    double slopeMax;
 
     int x;
     int y;

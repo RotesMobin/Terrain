@@ -232,7 +232,7 @@ void Terrain::erode()
 
     ite = rand = dot = lenSq1 = lenSq2 = angle = 0;
 
-    while(ite < 10000)
+    while(ite < 100)
     {
         for(int i = 0; i < width; i++)
         {
@@ -311,29 +311,65 @@ void Terrain::erode()
 void Terrain::initVeget(int nbveget, int nbCycles){
     veget= QVector<vegetation>();
     srand (time(NULL));
-    //randp.min()
-    int x,y,type;
+    doCycles(nbCycles,nbveget);
+
+}
+
+void Terrain::doCycles(int nbCycles,int nbveget){
+    for(int k=0;k<nbCycles;k++){
+        int i=0;
+        addTree(nbveget);
+        while(i<veget.count()){
+            int index=0;
+            while(checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
+               if(veget[i].age<veget[index].age){
+                   veget.remove(i);
+               }else if(veget[index].age<veget[i].age){
+                   veget.remove(index);
+                   if(index<i){
+                       i--;
+                   }
+               }else{
+                   veget[i].rayon=(veget[i].rayon+1)*(1/veget[i].age);
+               }
+            }
+            if(veget[i].age>veget[i].ageMax){
+                veget.remove(i);
+            }
+           veget[i].age++;
+           veget[i].rayon=(veget[i].rayon+1)*(1/veget[i].age);
+
+           i++;
+        }
+
+    }
+}
+
+void Terrain::addTree(int nbveget){
+    int x,y,type,index;
     for (int t=0;t<nbveget;t++){
         x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width-0)));
         y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length-0)));
-        type= 1 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(2-1)));
-        vegetation toAdd=vegetation(type,x,y);;
-        if(!checkVeget(toAdd.x,toAdd.y)){
+        type=rand()%2;
+        vegetation toAdd=vegetation(type,x,y);
+        if(!checkVeget2(toAdd.x,toAdd.y,toAdd.rayon,index)){
             if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
                 veget.append(toAdd);
             }
         }
     }
-
-
 }
 
 void Terrain::drawVeget(){
     QPixmap* map=new QPixmap(width,length);
     QPainter painter;
     painter.begin(map);
-    painter.setPen(QColor("red"));
     for(int i=0;i<veget.count();i++){
+        if(veget[i].slopeMax==90){
+            painter.setPen(QColor("red"));
+        }else{
+            painter.setPen(QColor("blue"));
+        }
         painter.drawEllipse(QPoint(veget[i].x,veget[i].y),veget[i].rayon,veget[i].rayon);
     }
     map->save("Veget.png");
@@ -341,9 +377,36 @@ void Terrain::drawVeget(){
     delete map;
 }
 
-bool Terrain::checkVeget(int x, int y){
+int Terrain::countVeget(int x, int y){
+    int count=0;
     for(int i=0;i<veget.count();i++){
         if(veget[i].x==x&&veget[i].y==y){
+                count++;
+        }
+    }
+    return count;
+}
+
+bool Terrain::checkVeget2(int x, int y,double rayon,int &index){
+    double distFromcircle=0;
+    for(int i=0;i<veget.count();i++){
+        if(veget[i].x!=x&&veget[i].y!=y){
+            distFromcircle=sqrt(pow(x-veget[i].x,2)+pow(y-veget[i].y,2));
+            if(distFromcircle<rayon){
+                index=i;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Terrain::checkVeget(int x, int y,double rayon,int &index){
+    double distFromcircle=0;
+    for(int i=0;i<veget.count();i++){
+        distFromcircle=sqrt(pow(x-veget[i].x,2)+pow(y-veget[i].y,2));
+        if(distFromcircle<rayon){
+            index=i;
             return true;
         }
     }

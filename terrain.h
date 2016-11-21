@@ -17,6 +17,7 @@
 #include <perlin.h>
 #include <ctime>
 #include <vegetation.h>
+#include <iostream>
 
 class Terrain
 {
@@ -41,7 +42,9 @@ public:
     QVector3D getNormAt(int x,int y);
     double getAvgSlope(int x, int y);
     vegetation getVeget(int x,int y);
-    bool checkVeget(int x, int y);
+    bool checkVeget(int x, int y, double rayon, int &index);
+    int countVeget(int x, int y);
+
     int getLength();
     int getWidth();
 
@@ -54,7 +57,10 @@ public:
     void initializeSlope();
     void initNormal();
     void initVeget(int nbveget,int nbCycles);
+    void doCycles(int nbCycles,int nbveget);
+    void addTree(int nbveget);
     void drawVeget();
+    bool checkVeget2(int x, int y,double rayon,int &index);
 
     QVector<double> height;
     QVector<double> dirt;
