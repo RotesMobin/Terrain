@@ -22,7 +22,7 @@ class Terrain
 {
 public:
     Terrain();
-    Terrain(int width, int length, int nbPointWidth, int nbPointLength);
+    Terrain(int width, int length);
 
     void loadFromHeightMap(QString name);
     void setHeightAt(int x, int y, double z);
@@ -32,7 +32,6 @@ public:
     void setAvgSlope(int x, int y, double value);
     void setVeget(int x,int y, vegetation value);
 
-    void generateTerrainFromNoise(double freq, double amp, double nbPoints, boolean ridge);
     void generateTerrainFromNoise(double freq, double amp,int start, boolean ridge);
 
     double getHeightAt(int x, int y);
@@ -55,6 +54,7 @@ public:
     void initNormal();
     void initVeget(int nbveget,int nbCycles);
     void drawVeget();
+    void positiveHeight();
 
     QVector<double> height;
     QVector<double> dirt;

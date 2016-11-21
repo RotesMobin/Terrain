@@ -19,7 +19,7 @@ void GLDisplay::initializeGL()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glColor3f(1.0, 1.0, 0.0);
 
-    terrain = Terrain(512, 512,512,512);
+    terrain = Terrain(512, 512);
 
     terrain.generateTerrainFromNoise(1, 300,100,true);
     terrain.generateTerrainFromNoise(3, 50,100,true);
