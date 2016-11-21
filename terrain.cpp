@@ -352,17 +352,15 @@ void Terrain::doCycles(int nbCycles,int nbveget){
         int i=0;
         addTree(nbveget);
         std::cout<<k<<std::endl;
-
         while(i<veget.count()){
             bool hasIncrease=false;
             bool hasBeenRemoved=false;
             int index=0;
             while(checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
-
-                //std::cout<<i<<std::endl;
                if(veget[i].age<veget[index].age){
                    hasBeenRemoved=true;
                    veget.remove(i);
+                   i--;
                }else if(veget[index].age<veget[i].age){
                    veget.remove(index);
                    if(index<i){
@@ -440,7 +438,7 @@ bool Terrain::checkVeget2(int x, int y,double rayon,int &index){
     for(int i=0;i<veget.count();i++){
         if(veget[i].x!=x&&veget[i].y!=y){
             distFromcircle=sqrt(pow(x-veget[i].x,2)+pow(y-veget[i].y,2));
-            if(distFromcircle<rayon){
+            if(distFromcircle<rayon+veget[i].rayon){
                 index=i;
                 return true;
             }
