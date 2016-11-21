@@ -13,8 +13,6 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    gldisplay.cpp \
     terrain.cpp \
     edge.cpp \
     face.cpp \
@@ -23,9 +21,7 @@ SOURCES += main.cpp\
     perlin.cpp \
     vegetation.cpp
 
-HEADERS  += mainwindow.h \
-    gldisplay.h \
-    terrain.h \
+HEADERS  +=terrain.h \
     edge.h \
     face.h \
     mesh.h \
@@ -33,7 +29,7 @@ HEADERS  += mainwindow.h \
     perlin.h \
     vegetation.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 LIBS += -lOpengl32
 install_it.path = $$OUT_PWD/Data

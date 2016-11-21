@@ -6,7 +6,7 @@ Terrain::Terrain()
 
 }
 
-Terrain::Terrain(int length, int width, int nbPointWidth, int nbPointLength)
+Terrain::Terrain(int length, int width)
 {
     this->width = width;
     this->length = length;
@@ -432,13 +432,7 @@ void Terrain::initNormal(){
     }
 }
 
-void Terrain::initializeSlope()
-{
-    int count = 0;
-    double* v8;
-    double slope, temp;
-    slope = temp = 0;
-
+void Terrain::positiveHeight(){
     double min = *std::min_element(height.constBegin(), height.constEnd());
 
     for(int i = 0; i < width; i++)
@@ -448,6 +442,15 @@ void Terrain::initializeSlope()
             setHeightAt(i, j, getHeightAt(i, j) + abs(min));
         }
     }
+
+}
+
+void Terrain::initializeSlope()
+{
+    int count = 0;
+    double* v8;
+    double slope, temp;
+    slope = temp = 0;
 
     for(int i = 0; i < width; i++)
     {
