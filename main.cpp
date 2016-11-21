@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     terrain.initializeDirt();
     //terrain.erode();
     terrain.initNormal();
-    terrain.initVeget(300,2);
+    terrain.initVeget(30,300);
     terrain.drawVeget();
     Mesh m = Mesh(terrain);
     m.saveAsObj(terrain);

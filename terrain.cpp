@@ -351,10 +351,17 @@ void Terrain::doCycles(int nbCycles,int nbveget){
     for(int k=0;k<nbCycles;k++){
         int i=0;
         addTree(nbveget);
+        std::cout<<k<<std::endl;
+
         while(i<veget.count()){
+            bool hasIncrease=false;
+            bool hasBeenRemoved=false;
             int index=0;
             while(checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
+
+                //std::cout<<i<<std::endl;
                if(veget[i].age<veget[index].age){
+                   hasBeenRemoved=true;
                    veget.remove(i);
                }else if(veget[index].age<veget[i].age){
                    veget.remove(index);
@@ -362,15 +369,24 @@ void Terrain::doCycles(int nbCycles,int nbveget){
                        i--;
                    }
                }else{
-                   veget[i].rayon=(veget[i].rayon+1)*(1/veget[i].age);
+                   if(!hasIncrease){
+                   veget[i].age++;
+                   hasIncrease=true;
+                   veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
                }
+             }
             }
-            if(veget[i].age>veget[i].ageMax){
-                veget.remove(i);
-            }
-           veget[i].age++;
-           veget[i].rayon=(veget[i].rayon+1)*(1/veget[i].age);
+            if(!hasIncrease){
+                veget[i].age++;
+                veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
 
+            }
+            if(!hasBeenRemoved){
+                if(veget[i].age>veget[i].ageMax){
+                    veget.remove(i);
+                    i--;
+                }
+            }
            i++;
         }
 
@@ -384,11 +400,11 @@ void Terrain::addTree(int nbveget){
         y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length-0)));
         type=rand()%2;
         vegetation toAdd=vegetation(type,x,y);
-        if(!checkVeget2(toAdd.x,toAdd.y,toAdd.rayon,index)){
+        //if(!checkVeget2(toAdd.x,toAdd.y,toAdd.rayon,index)){
             if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
                 veget.append(toAdd);
             }
-        }
+       // }
     }
 }
 
