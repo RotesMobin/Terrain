@@ -42,6 +42,9 @@ private:
     void drawTriangle(Sommet v1,Sommet v2,Sommet v3);
     QVector<Sommet> sommets;
     QVector<Face> faces;
+    QString drawTree(int type, int& start, QVector3D pos, int size);
+    QString drawType1(int& start,QVector3D pos, int size);
+    QString drawType2(int& start,QVector3D pos, int size);
 
 };
 

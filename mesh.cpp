@@ -22,7 +22,7 @@ Mesh::Mesh(Terrain &T)
         }
     }
 }
-
+#include <qdebug.h>
 void Mesh::saveAsObj(Terrain obj){
     QFile file("Terrain.obj");
     file.open(QIODevice::WriteOnly);
@@ -40,7 +40,71 @@ void Mesh::saveAsObj(Terrain obj){
         out<<"f "<<faces[i].getS1()+1<<"//"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"//"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"//"<<faces[i].getS3()+1<<"\n";
 
     }
+    int start=sommets.size();
+    for(int i=0;i<obj.veget.size();i++){
+        out<<drawTree(obj.veget[i].type,start,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+    }
+
     file.close();
+}
+
+QString Mesh::drawTree(int type,int& start, QVector3D pos, int size){
+    switch (type) {
+    case 1:
+        return(drawType1(start,pos,size));
+        break;
+    default:
+        return(drawType2(start,pos,size));
+        break;
+    }
+}
+
+QString Mesh::drawType1(int& start,QVector3D pos, int size){
+    QString tree;
+    int height=size>4?size:4;
+
+    tree="v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(5+start)+"//\n";
+    tree=tree+"f  "+QString::number(3+start)+"//  "+QString::number(1+start)+"//  "+QString::number(5+start)+"//\n";
+    tree=tree+"f  "+QString::number(3+start)+"//  "+QString::number(5+start)+"//  "+QString::number(7+start)+"//\n";
+    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//  "+QString::number(7+start)+"//\n";
+    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(7+start)+"//  "+QString::number(8+start)+"//\n";
+    tree=tree+"f  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//  "+QString::number(6+start)+"//\n";
+    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(8+start)+"//  "+QString::number(6+start)+"//\n";
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//\n";
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//\n";
+    tree=tree+"f  "+QString::number(5+start)+"//  "+QString::number(6+start)+"//  "+QString::number(7+start)+"//\n";
+    tree=tree+"f  "+QString::number(6+start)+"//  "+QString::number(8+start)+"//  "+QString::number(7+start)+"//\n";
+
+    start+=8;
+
+    return tree;
+}
+
+QString Mesh::drawType2(int& start,QVector3D pos, int size){
+    QString tree;
+    int height=size>4?size:4;
+
+    tree="v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(0.5+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
+    tree=tree+"v  "+QString::number(0.5+pos.x())+" "+QString::number(0.5+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(3+start)+"//  "+QString::number(2+start)+"//\n";
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//\n";
+    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//\n";
+    tree=tree+"f  "+QString::number(2+start)+"//  "+QString::number(3+start)+"//  "+QString::number(4+start)+"//\n";
+
+    start+=4;
+    return tree;
 }
 
 int Mesh::LoadFromOff(QString fileName){
