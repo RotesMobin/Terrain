@@ -20,12 +20,15 @@ int main(int argc, char *argv[])
     terrain.positiveHeight();
 
     //terrain.initializeDirt();
-    terrain.erode(250);
+    //terrain.erode(500);
     terrain.initializeSlope();
+    //terrain.waterErode(50);
+    terrain.generateDirtMap();
 
-    terrain.initNormal();
+
+    /*terrain.initNormal();
     terrain.initVeget(30,300);
-    terrain.drawVeget();
+    terrain.drawVeget();*/
     Mesh m = Mesh(terrain);
     m.saveAsObj(terrain);
     return 0;
