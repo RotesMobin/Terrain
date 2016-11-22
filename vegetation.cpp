@@ -20,6 +20,7 @@ vegetation::vegetation(int type, int x, int y){
         this->heightMax=150;
         this->ageMax=55;
     }
+    this->type=type;
     this->x=x;
     this->y=y;
 }
