@@ -73,10 +73,12 @@ private:
 
     int width;
     int length;
+    double talus;
 
     double* V8(int x, int y);
     double** V8N(int x, int y);
     double** V4N(int x, int y);
+    void Slide(double* from);
 };
 
 #endif // TERRAIN_H

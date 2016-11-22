@@ -10,6 +10,7 @@ Terrain::Terrain(int length, int width)
 {
     this->width = width;
     this->length = length;
+    this->talus = 128 / ((length + width) * 0.5);
 
     for(int i = 0; i < width; i++)
     {
@@ -225,13 +226,13 @@ void Terrain::saveAsImage(QString name)
 
 void Terrain::erode(int iterations)
 {
-    double talus = 128 / ((length + width) * 0.5);
     int ite, rand;
     //QVector3D base, target;
     double dot, lenSq1, lenSq2, angle, distSum, distMax, dist;
     double** v8;
 
     ite = rand = dot = lenSq1 = lenSq2 = angle = distSum = distMax = dist = 0;
+    qDebug() << talus;
 
     while(ite < iterations)
     {
@@ -373,11 +374,12 @@ void Terrain::erode(int iterations)
                     }
                 }
 
-                if(distMax > 0)
+                if(distMax > 0 && distMax < talus)
                 {
                     distMax *= 0.5;
                     setHeightAt(i, j, getHeightAt(i, j) - distMax);
                     setDirtAt(v8[l][1], v8[l][2], getDirtAt(v8[l][1], v8[l][2]) + distMax);
+                    Slide(v8[l]);
                 }
 
                 for(int s = 0; s < 8; s++)
@@ -391,6 +393,42 @@ void Terrain::erode(int iterations)
         ite++;
         //qDebug() << ite;
     }
+}
+
+void Terrain::Slide(double* from)
+{
+    double** v8 = V8N(from[1], from[2]);
+    int dist = 0;
+    int distMax = 0;
+    int l = 0;
+
+    for(int s = 0; s < 8; s++)
+    {
+        if(v8[s][0] > 0 && distMax < talus)
+        {
+            dist = getHeightAt(from[1], from[2]) + getDirtAt(from[1], from[2]) - v8[s][0];
+
+            if(dist > distMax)
+            {
+                distMax = dist;
+                l = s;
+            }
+        }
+    }
+
+    if(distMax > talus)
+    {
+        distMax *= 0.5;
+        setHeightAt(from[1], from[2], getHeightAt(from[1], from[2]) - distMax);
+        setDirtAt(v8[l][1], v8[l][2], getDirtAt(v8[l][1], v8[l][2]) + distMax);
+        Slide(v8[l]);
+    }
+
+    for(int s = 0; s < 8; s++)
+    {
+        delete(v8[s]);
+    }
+    delete(v8);
 }
 
 void Terrain::waterErode(int iterations)
@@ -422,6 +460,7 @@ void Terrain::generateDirtMap()
     int val;
     QImage map = QImage(width, length, QImage::Format_RGB32);
     double max = *std::max_element(dirt.constBegin(), dirt.constEnd());
+    double min = *std::min_element(dirt.constBegin(), dirt.constEnd());
 
     for(int i = 0; i < width; i++)
     {
@@ -432,6 +471,8 @@ void Terrain::generateDirtMap()
         }
     }
 
+    qDebug() << "Dirt Max : " << max;
+    qDebug() << "Dirt Min : " << min;
     qDebug() << map.save("DirtMap.png");
 }
 
