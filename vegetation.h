@@ -18,7 +18,7 @@ public:
     int x;
     int y;
     vegetation();
-    vegetation(int type, int x, int y);
+    vegetation(int type, int x, int y, double maxDirt);
     bool IsAlived(double slope, double dirt, double height);
 };
 

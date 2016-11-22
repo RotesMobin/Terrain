@@ -57,8 +57,8 @@ public:
     void initializeSlope();
     void initNormal();
     void initVeget(int nbveget,int nbCycles);
-    void doCycles(int nbCycles,int nbveget);
-    void addTree(int nbveget);
+    void doCycles(int nbCycles, int nbveget, double maxDirt);
+       void addTree(int nbveget, double maxDirt);
     void drawVeget();
     bool checkVeget2(int x, int y,double rayon,int &index);
     void positiveHeight();
@@ -70,7 +70,6 @@ public:
     QVector<vegetation> veget;
     QVector<QVector3D> norm;
 private:
-
     int width;
     int length;
     double talus;
