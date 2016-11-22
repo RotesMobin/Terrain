@@ -14,7 +14,7 @@ public:
     double ageMax;
     double rayon;
     double slopeMax;
-
+    int type;
     int x;
     int y;
     vegetation();
