@@ -229,7 +229,7 @@ void Terrain::erode(int iterations)
     int ite, rand;
     //QVector3D base, target;
     double dot, lenSq1, lenSq2, angle, distSum, distMax, dist;
-    double** v4;
+    double** v8;
 
     ite = rand = dot = lenSq1 = lenSq2 = angle = distSum = distMax = dist = 0;
 
@@ -240,7 +240,7 @@ void Terrain::erode(int iterations)
             for(int j = 0; j < length; j++)
             {
                 // Erosion Th
-                v4 = V8N(i, j);
+                v8 = V8N(i, j);
                 dist = 0;
                 distMax = 0;
                 int l = 0;
@@ -361,9 +361,9 @@ void Terrain::erode(int iterations)
 
                 for(int s = 0; s < 8; s++)
                 {
-                    if(v4[s][0] > 0)
+                    if(v8[s][0] > 0)
                     {
-                        dist = getHeightAt(i, j) + getDirtAt(i, j) - v4[s][0];
+                        dist = getHeightAt(i, j) + getDirtAt(i, j) - v8[s][0];
 
                         if(dist > distMax)
                         {
@@ -373,24 +373,66 @@ void Terrain::erode(int iterations)
                     }
                 }
 
-                if(distMax > 0 && distMax <= talus)
+                if(distMax > 0)
                 {
                     distMax *= 0.5;
-                    setHeightAt(i, j, getHeightAt(i, j) + distMax);
-                    setDirtAt(v4[l][1], v4[l][2], getDirtAt(v4[l][1], v4[l][2]) + distMax);
+                    setHeightAt(i, j, getHeightAt(i, j) - distMax);
+                    setDirtAt(v8[l][1], v8[l][2], getDirtAt(v8[l][1], v8[l][2]) + distMax);
                 }
 
                 for(int s = 0; s < 8; s++)
                 {
-                    delete(v4[s]);
+                    delete(v8[s]);
                 }
-                delete(v4);
+                delete(v8);
+            }
+        }
+
+        ite++;
+        //qDebug() << ite;
+    }
+}
+
+void Terrain::waterErode(int iterations)
+{
+    /*while(ite < iterations)
+    {
+        for(int i = 0; i < width; i++)
+        {
+            for(int j = 0; j < length; j++)
+            {
+                // Hydrolic Erosion
+                v8 = V8N(i, j);
+
+                for(int s = 0; s < 8; s++)
+                {
+                    delete(v8[s]);
+                }
+                delete(v8);
             }
         }
 
         ite++;
         qDebug() << ite;
+    }*/
+}
+
+void Terrain::generateDirtMap()
+{
+    int val;
+    QImage map = QImage(width, length, QImage::Format_RGB32);
+    double max = *std::max_element(dirt.constBegin(), dirt.constEnd());
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            val = (int)getDirtAt(i, j) / max * 255;
+            map.setPixel(i, j, qRgb(val, 50, 255 - val));
+        }
     }
+
+    qDebug() << map.save("DirtMap.png");
 }
 
 void Terrain::initVeget(int nbveget, int nbCycles){

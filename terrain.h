@@ -51,7 +51,9 @@ public:
     void saveAsImage(QString name);
     void display();
 
+    void waterErode(int iterations);
     void erode(int iterations);
+    void generateDirtMap();
     void initializeDirt();
     void initializeSlope();
     void initNormal();

@@ -23,6 +23,9 @@ int main(int argc, char *argv[])
     //terrain.initializeDirt();
     terrain.erode(5);
     terrain.initializeSlope();
+    //terrain.waterErode(50);
+    terrain.generateDirtMap();
+
 
     terrain.initNormal();
     terrain.initVeget(30,300);
