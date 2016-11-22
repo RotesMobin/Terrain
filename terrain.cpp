@@ -406,36 +406,52 @@ void Terrain::doCycles(int nbCycles,int nbveget){
         addTree(nbveget);
         std::cout<<k<<std::endl;
         while(i<veget.count()){
-            bool hasIncrease=false;
+
+            int hasIncrease=0;
             bool hasBeenRemoved=false;
             int index=0;
-            while(checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
-               if(veget[i].age<veget[index].age){
-                   hasBeenRemoved=true;
+
+            while(i>-1&&checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
+                std::cout<<"i:"<<i<<"index:"<<index<<veget.count()<<std::endl;
+
+                if(veget[i].age<veget[index].age){
+                    std::cout<<"remove i"<<std::endl;
+
+                   hasIncrease=2;
                    veget.remove(i);
                    i--;
+
                }else if(veget[index].age<veget[i].age){
-                   veget.remove(index);
+                    std::cout<<"remove index"<<std::endl;
+                    hasIncrease=2;
+                    veget.remove(index);
                    if(index<i){
                        i--;
                    }
                }else{
-                   if(!hasIncrease){
-                   veget[i].age++;
-                   hasIncrease=true;
-                   veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
-               }
+                   if(hasIncrease==0||hasIncrease==2){
+                       std::cout<<"up"<<std::endl;
+                       hasIncrease=1;
+                       veget[i].age++;
+                       veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
+                   }
              }
             }
-            if(!hasIncrease){
-                veget[i].age++;
-                veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
+            if(i>0){
+                if(hasIncrease==0){
+                    std::cout<<"hasincreasefalse"<<std::endl;
+                    veget[i].age++;
+                    veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
 
-            }
-            if(!hasBeenRemoved){
-                if(veget[i].age>veget[i].ageMax){
-                    veget.remove(i);
-                    i--;
+                }
+                if(!hasBeenRemoved){
+                    if(veget[i].age>veget[i].ageMax){
+                        std::cout<<"remove i second"<<std::endl;
+
+                        veget.remove(i);
+                            i--;
+
+                    }
                 }
             }
            i++;
@@ -447,9 +463,10 @@ void Terrain::doCycles(int nbCycles,int nbveget){
 void Terrain::addTree(int nbveget){
     int x,y,type,index;
     for (int t=0;t<nbveget;t++){
-        x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width-0)));
-        y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length-0)));
+        x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width)));
+        y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length)));
         type=rand()%2;
+            std::cout<<(y * width) + x<<std::endl;
         vegetation toAdd=vegetation(type,x,y);
         //if(!checkVeget2(toAdd.x,toAdd.y,toAdd.rayon,index)){
             if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
@@ -463,6 +480,7 @@ void Terrain::drawVeget(){
     QPixmap* map=new QPixmap(width,length);
     QPainter painter;
     painter.begin(map);
+    map->fill(QColor("black"));
     for(int i=0;i<veget.count();i++){
         if(veget[i].slopeMax==90){
             painter.setPen(QColor("red"));

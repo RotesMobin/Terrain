@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
 {
 
     QApplication a(argc, argv);
-    Terrain terrain = Terrain(256, 256);
+    Terrain terrain;
+    terrain = Terrain(256, 256);
 
     terrain.generateTerrainFromNoise(1, 300,100,true);
     terrain.generateTerrainFromNoise(3, 50,100,true);
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
     terrain.positiveHeight();
 
     //terrain.initializeDirt();
-    terrain.erode(250);
+    terrain.erode(5);
     terrain.initializeSlope();
 
     terrain.initNormal();
