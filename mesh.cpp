@@ -42,7 +42,7 @@ void Mesh::saveAsObj(Terrain obj){
     }
     int start=sommets.size();
     for(int i=0;i<obj.veget.size();i++){
-        out<<drawTree(obj.veget[i].type,start,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+        out<<drawTree(obj.veget[i].type,start,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)+obj.getDirtAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
     }
 
     file.close();
