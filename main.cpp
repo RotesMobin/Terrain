@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     terrain.positiveHeight();
 
     //terrain.initializeDirt();
+    terrain.erode(250);
     terrain.initializeSlope();
 
     terrain.initNormal();
