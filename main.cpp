@@ -2,14 +2,18 @@
 #include <QApplication>
 #include <QDir>
 #include <QString>
+#include <QElapsedTimer>
 #include <terrain.h>
 #include <mesh.h>
+
 int main(int argc, char *argv[])
 {
+    QElapsedTimer timer;
+    timer.start();
 
     QApplication a(argc, argv);
     Terrain terrain;
-    terrain = Terrain(256, 256);
+    terrain = Terrain(512, 512);
 
     terrain.generateTerrainFromNoise(1, 300,100,true);
     terrain.generateTerrainFromNoise(3, 50,100,true);
@@ -21,7 +25,11 @@ int main(int argc, char *argv[])
     terrain.positiveHeight();
 
     //terrain.initializeDirt();
-    terrain.erode(5);
+    terrain.erode(15);
+
+    qDebug() << timer.elapsed();
+    timer.restart();
+
     terrain.initializeSlope();
     //terrain.waterErode(50);
     terrain.generateDirtMap();
@@ -29,7 +37,13 @@ int main(int argc, char *argv[])
 
     terrain.initNormal();
     terrain.initVeget(30,300);
+
+    qDebug() << timer.elapsed();
+
     terrain.drawVeget();
+
+
+
     Mesh m = Mesh(terrain);
     m.saveAsObj(terrain);
     return 0;

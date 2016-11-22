@@ -232,7 +232,6 @@ void Terrain::erode(int iterations)
     double** v8;
 
     ite = rand = dot = lenSq1 = lenSq2 = angle = distSum = distMax = dist = 0;
-    qDebug() << talus;
 
     while(ite < iterations)
     {
@@ -374,7 +373,7 @@ void Terrain::erode(int iterations)
                     }
                 }
 
-                if(distMax > 0 && distMax < talus)
+                if(distMax > 0)
                 {
                     distMax *= 0.5;
                     setHeightAt(i, j, getHeightAt(i, j) - distMax);
@@ -404,7 +403,7 @@ void Terrain::Slide(double* from)
 
     for(int s = 0; s < 8; s++)
     {
-        if(v8[s][0] > 0 && distMax < talus)
+        if(v8[s][0] > 0)
         {
             dist = getHeightAt(from[1], from[2]) + getDirtAt(from[1], from[2]) - v8[s][0];
 
@@ -416,7 +415,7 @@ void Terrain::Slide(double* from)
         }
     }
 
-    if(distMax > talus)
+    if(distMax > 0 && distMax > talus)
     {
         distMax *= 0.5;
         setHeightAt(from[1], from[2], getHeightAt(from[1], from[2]) - distMax);
@@ -471,8 +470,8 @@ void Terrain::generateDirtMap()
         }
     }
 
-    qDebug() << "Dirt Max : " << max;
-    qDebug() << "Dirt Min : " << min;
+    //qDebug() << "Dirt Max : " << max;
+    //qDebug() << "Dirt Min : " << min;
     qDebug() << map.save("DirtMap.png");
 }
 
