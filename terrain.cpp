@@ -446,7 +446,6 @@ void Terrain::doCycles(int nbCycles,int nbveget){
     for(int k=0;k<nbCycles;k++){
         int i=0;
         addTree(nbveget);
-        std::cout<<k<<std::endl;
         while(i<veget.count()){
 
             int hasIncrease=0;
@@ -454,17 +453,12 @@ void Terrain::doCycles(int nbCycles,int nbveget){
             int index=0;
 
             while(i>-1&&checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
-                std::cout<<"i:"<<i<<"index:"<<index<<veget.count()<<std::endl;
-
                 if(veget[i].age<veget[index].age){
-                    std::cout<<"remove i"<<std::endl;
-
                    hasIncrease=2;
                    veget.remove(i);
                    i--;
 
                }else if(veget[index].age<veget[i].age){
-                    std::cout<<"remove index"<<std::endl;
                     hasIncrease=2;
                     veget.remove(index);
                    if(index<i){
@@ -472,7 +466,6 @@ void Terrain::doCycles(int nbCycles,int nbveget){
                    }
                }else{
                    if(hasIncrease==0||hasIncrease==2){
-                       std::cout<<"up"<<std::endl;
                        hasIncrease=1;
                        veget[i].age++;
                        veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
@@ -481,15 +474,12 @@ void Terrain::doCycles(int nbCycles,int nbveget){
             }
             if(i>0){
                 if(hasIncrease==0){
-                    std::cout<<"hasincreasefalse"<<std::endl;
                     veget[i].age++;
                     veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
 
                 }
                 if(!hasBeenRemoved){
                     if(veget[i].age>veget[i].ageMax){
-                        std::cout<<"remove i second"<<std::endl;
-
                         veget.remove(i);
                             i--;
 
@@ -508,13 +498,10 @@ void Terrain::addTree(int nbveget){
         x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width)));
         y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length)));
         type=rand()%2;
-            std::cout<<(y * width) + x<<std::endl;
         vegetation toAdd=vegetation(type,x,y);
-        //if(!checkVeget2(toAdd.x,toAdd.y,toAdd.rayon,index)){
             if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
                 veget.append(toAdd);
             }
-       // }
     }
 }
 
@@ -560,17 +547,7 @@ bool Terrain::checkVeget2(int x, int y,double rayon,int &index){
     return false;
 }
 
-bool Terrain::checkVeget(int x, int y,double rayon,int &index){
-    double distFromcircle=0;
-    for(int i=0;i<veget.count();i++){
-        distFromcircle=sqrt(pow(x-veget[i].x,2)+pow(y-veget[i].y,2));
-        if(distFromcircle<rayon){
-            index=i;
-            return true;
-        }
-    }
-    return false;
-}
+
 
 void Terrain::initNormal(){
     double z,zx1,zx0,zy1,zy0,dx,dy;

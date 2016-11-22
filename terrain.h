@@ -41,7 +41,6 @@ public:
     QVector3D getNormAt(int x,int y);
     double getAvgSlope(int x, int y);
     vegetation getVeget(int x,int y);
-    bool checkVeget(int x, int y, double rayon, int &index);
     int countVeget(int x, int y);
 
     int getLength();
