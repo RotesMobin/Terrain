@@ -1,0 +1,3 @@
+Intel Core i5-6600 3.50GHz
+Vanilla.obj : 0,699s
+Erosion&Veget.obj : 44,822s -- 15 passes d'érosion thermique + 30 cycles de végétation
