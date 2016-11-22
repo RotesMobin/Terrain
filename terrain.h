@@ -51,7 +51,7 @@ public:
     void saveAsImage(QString name);
     void display();
 
-    void erode();
+    void erode(int iterations);
     void initializeDirt();
     void initializeSlope();
     void initNormal();
@@ -74,6 +74,8 @@ private:
     int length;
 
     double* V8(int x, int y);
+    double** V8N(int x, int y);
+    double** V4N(int x, int y);
 };
 
 #endif // TERRAIN_H

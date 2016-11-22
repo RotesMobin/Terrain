@@ -223,120 +223,173 @@ void Terrain::saveAsImage(QString name)
     qDebug()<<map.save("map.png");
 }
 
-void Terrain::erode()
+void Terrain::erode(int iterations)
 {
+    double talus = 128 / ((length + width) * 0.5);
     int ite, rand;
-    QVector3D base, target;
+    //QVector3D base, target;
     double dot, lenSq1, lenSq2, angle, distSum, distMax, dist;
-    double* v8;
+    double** v4;
 
     ite = rand = dot = lenSq1 = lenSq2 = angle = distSum = distMax = dist = 0;
 
-    while(ite < 100)
+    while(ite < iterations)
     {
         for(int i = 0; i < width; i++)
         {
             for(int j = 0; j < length; j++)
             {
-                if(qrand() % 10 + 1 == 1)
+                // Erosion Th
+                v4 = V8N(i, j);
+                dist = 0;
+                distMax = 0;
+                int l = 0;
+
+                // Boucle de découverte des hauteurs
+                /*for(int s = 0; s < 8; s++)
                 {
-                    // Erosion Th
-                    v8 = V8(i, j);
-                    distSum = distMax = 0;
-
-                    // Boucle de découverte des hauteurs
-                    for(int s = 0; s < 8; s++)
+                    if(v8[s] > 0)
                     {
-                        if(v8[s] > 0)
+                        switch(s)
                         {
-                            switch(s)
+                            case 0:
+                                base = QVector3D(1, 0, 0);
+                                target = QVector3D(1, 0, getHeightAt(i + 1, j) + getDirtAt(i + 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
+                            break;
+
+                            case 1:
+                                base = QVector3D(1, 1, 0);
+                                target = QVector3D(1, 1, getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1));
+                            break;
+
+                            case 2:
+                                base = QVector3D(0, 1, 0);
+                                target = QVector3D(0, 1, getHeightAt(i, j + 1) + getDirtAt(i, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i, j + 1) + getDirtAt(i, j + 1));
+                            break;
+
+                            case 3:
+                                base = QVector3D(-1, 1, 0);
+                                target = QVector3D(-1, 1, getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1));
+                            break;
+
+                            case 4:
+                                base = QVector3D(-1, 0, 0);
+                                target = QVector3D(-1, 0, getHeightAt(i - 1, j) + getDirtAt(i - 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j) + getDirtAt(i - 1, j));
+                            break;
+
+                            case 5:
+                                base = QVector3D(-1, -1, 0);
+                                target = QVector3D(-1, -1, getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1));
+                            break;
+
+                            case 6:
+                                base = QVector3D(0, -1, 0);
+                                target = QVector3D(0, -1, getHeightAt(i, j - 1) + getDirtAt(i, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i, j - 1) + getDirtAt(i, j - 1));
+                            break;
+
+                            case 7:
+                                base = QVector3D(1, -1, 0);
+                                target = QVector3D(1, -1, getHeightAt(i + 1, j - 1) + getDirtAt(i + 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
+                                dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
+                            break;
+                        }
+
+                        // Compute angle between base and target vectors in degrees
+                        base.normalize();
+                        target.normalize();
+                        dot = base.dotProduct(base, target);
+                        lenSq1 = base.x() * base.x() + base.y() * base.y() + base.z() * base.z();
+                        lenSq2 = target.x() * target.x() + target.y() * target.y() + target.z() * target.z();
+                        angle = qRadiansToDegrees(acos(dot / sqrt(lenSq1 * lenSq2)));
+
+                        if(angle > 35 && dist > 0)
+                        {
+                            distSum += dist;
+
+                            if(distMax < dist)
                             {
-                                case 0:
-                                    base = QVector3D(1, 0, 0);
-                                    target = QVector3D(1, 0, getHeightAt(i + 1, j) + getDirtAt(i + 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
-                                break;
-
-                                case 1:
-                                    base = QVector3D(1, 1, 0);
-                                    target = QVector3D(1, 1, getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j + 1) + getDirtAt(i + 1, j + 1));
-                                break;
-
-                                case 2:
-                                    base = QVector3D(0, 1, 0);
-                                    target = QVector3D(0, 1, getHeightAt(i, j + 1) + getDirtAt(i, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i, j + 1) + getDirtAt(i, j + 1));
-                                break;
-
-                                case 3:
-                                    base = QVector3D(-1, 1, 0);
-                                    target = QVector3D(-1, 1, getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j + 1) + getDirtAt(i - 1, j + 1));
-                                break;
-
-                                case 4:
-                                    base = QVector3D(-1, 0, 0);
-                                    target = QVector3D(-1, 0, getHeightAt(i - 1, j) + getDirtAt(i - 1, j) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j) + getDirtAt(i - 1, j));
-                                break;
-
-                                case 5:
-                                    base = QVector3D(-1, -1, 0);
-                                    target = QVector3D(-1, -1, getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i - 1, j - 1) + getDirtAt(i - 1, j - 1));
-                                break;
-
-                                case 6:
-                                    base = QVector3D(0, -1, 0);
-                                    target = QVector3D(0, -1, getHeightAt(i, j - 1) + getDirtAt(i, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i, j - 1) + getDirtAt(i, j - 1));
-                                break;
-
-                                case 7:
-                                    base = QVector3D(1, -1, 0);
-                                    target = QVector3D(1, -1, getHeightAt(i + 1, j - 1) + getDirtAt(i + 1, j - 1) - getHeightAt(i, j) - getDirtAt(i, j));
-                                    dist = getHeightAt(i, j) + getDirtAt(i, j) - (getHeightAt(i + 1, j) + getDirtAt(i + 1, j));
-                                break;
-                            }
-
-                            // Compute angle between base and target vectors in degrees
-                            base.normalize();
-                            target.normalize();
-                            dot = base.dotProduct(base, target);
-                            lenSq1 = base.x() * base.x() + base.y() * base.y() + base.z() * base.z();
-                            lenSq2 = target.x() * target.x() + target.y() * target.y() + target.z() * target.z();
-                            angle = qRadiansToDegrees(acos(dot / sqrt(lenSq1 * lenSq2)));
-
-                            if(angle > 35 && dist > 0)
-                            {
-                                distSum += dist;
-
-                                if(distMax < dist)
-                                {
-                                    distMax = dist;
-                                }
-                            }
-                            else
-                            {
-                                v8[s] = 0;
+                                distMax = dist;
                             }
                         }
-                    }
-
-                    // Boucle de déplacement des sédiments
-                    for(int s = 0; s < 8; s++)
-                    {
-                        if(v8[s] > 0)
+                        else
                         {
-
+                            v8[s] = 0;
                         }
                     }
                 }
+
+                // Boucle de déplacement des sédiments
+                for(int s = 0; s < 8; s++)
+                {
+                    if(v8[s] > 0)
+                    {
+                        switch(s)
+                        {
+                            case 0:
+                            break;
+
+                            case 1:
+                            break;
+
+                            case 2:
+                            break;
+
+                            case 3:
+                            break;
+
+                            case 4:
+                            break;
+
+                            case 5:
+                            break;
+
+                            case 6:
+                            break;
+
+                            case 7:
+                            break;
+                        }
+                    }
+                }*/
+
+                for(int s = 0; s < 8; s++)
+                {
+                    if(v4[s][0] > 0)
+                    {
+                        dist = getHeightAt(i, j) + getDirtAt(i, j) - v4[s][0];
+
+                        if(dist > distMax)
+                        {
+                            distMax = dist;
+                            l = s;
+                        }
+                    }
+                }
+
+                if(distMax > 0 && distMax <= talus)
+                {
+                    distMax *= 0.5;
+                    setHeightAt(i, j, getHeightAt(i, j) + distMax);
+                    setDirtAt(v4[l][1], v4[l][2], getDirtAt(v4[l][1], v4[l][2]) + distMax);
+                }
+
+                for(int s = 0; s < 8; s++)
+                {
+                    delete(v4[s]);
+                }
+                delete(v4);
             }
         }
 
         ite++;
+        qDebug() << ite;
     }
 }
 
@@ -494,7 +547,7 @@ void Terrain::positiveHeight(){
 void Terrain::initializeSlope()
 {
     int count = 0;
-    double* v8;
+    double** v8;
     double slope, temp;
     slope = temp = 0;
 
@@ -502,20 +555,26 @@ void Terrain::initializeSlope()
     {
         for(int j = 0; j < length; j++)
         {
-            v8 = V8(i, j);
+            v8 = V8N(i, j);
             count = 0;
             temp = 0;
 
             for(int s = 0; s < 8; s++)
             {
-                if(v8[s] > 0)
+                if(v8[s][0] > 0)
                 {
-                    temp += abs(v8[s]);
+                    temp += abs(v8[s][0]);
                     count++;
                 }
             }
 
             setAvgSlope(i, j, temp / count);
+
+            for(int s = 0; s < 8; s++)
+            {
+                delete(v8[s]);
+            }
+            delete(v8);
         }
     }
 
@@ -609,6 +668,124 @@ double* Terrain::V8(int x, int y)
     if (y + 1 < width && x + 1 < length)
     {
         ret[1] = getHeightAt(x + 1, y + 1) + getDirtAt(x + 1, y + 1);
+    }
+
+    return ret;
+}
+
+double** Terrain::V8N(int x, int y)
+{
+    double** ret = new double*[8];
+
+    for(int i = 0; i < 8; i++)
+    {
+        ret[i] = new double[3];
+
+        for(int j = 0; j < 3; j++)
+        {
+            ret[i][j] = 0;
+        }
+    }
+
+    if (x + 1 < length)
+    {
+        ret[0][0] = getHeightAt(x + 1, y) + getDirtAt(x + 1, y);
+        ret[0][1] = x + 1;
+        ret[0][2] = y;
+    }
+
+    if (x > 0)
+    {
+        ret[4][0] = getHeightAt(x - 1, y) + getDirtAt(x - 1, y);
+        ret[4][1] = x - 1;
+        ret[4][2] = y;
+    }
+
+    if (y > 0)
+    {
+        ret[6][0] = getHeightAt(x, y - 1) + getDirtAt(x, y - 1);
+        ret[6][1] = x;
+        ret[6][2] = y - 1;
+    }
+
+    if (y + 1 < width)
+    {
+        ret[2][0] = getHeightAt(x, y + 1) + getDirtAt(x, y + 1);
+        ret[2][1] = x;
+        ret[2][2] = y + 1;
+    }
+
+    if (x > 0 && y > 0)
+    {
+        ret[5][0] = getHeightAt(x - 1, y - 1) + getDirtAt(x - 1, y - 1);
+        ret[5][1] = x - 1;
+        ret[5][2] = y - 1;
+    }
+
+    if (x + 1 < length && y > 0)
+    {
+        ret[7][0] = getHeightAt(x + 1, y - 1) + getDirtAt(x + 1, y - 1);
+        ret[7][1] = x + 1;
+        ret[7][2] = y - 1;
+    }
+
+    if (y + 1 < width && x > 0)
+    {
+        ret[3][0] = getHeightAt(x - 1, y + 1) + getDirtAt(x - 1, y + 1);
+        ret[3][1] = x - 1;
+        ret[3][2] = y + 1;
+    }
+
+    if (y + 1 < width && x + 1 < length)
+    {
+        ret[1][0] = getHeightAt(x + 1, y + 1) + getDirtAt(x + 1, y + 1);
+        ret[1][1] = x + 1;
+        ret[1][2] = y + 1;
+    }
+
+    return ret;
+}
+
+double** Terrain::V4N(int x, int y)
+{
+    double** ret = new double*[4];
+
+    for(int i = 0; i < 4; i++)
+    {
+        ret[i] = new double[3];
+
+        for(int j = 0; j < 3; j++)
+        {
+            ret[i][j] = 0;
+        }
+    }
+
+    if (x + 1 < length)
+    {
+        ret[0][0] = getHeightAt(x + 1, y) + getDirtAt(x + 1, y);
+        ret[0][1] = x + 1;
+        ret[0][2] = y;
+    }
+
+    if (x > 0)
+    {
+        ret[2][0] = getHeightAt(x - 1, y) + getDirtAt(x - 1, y);
+        ret[2][1] = x - 1;
+        ret[2][2] = y;
+    }
+
+    if (y > 0)
+    {
+        ret[3][0] = getHeightAt(x, y - 1) + getDirtAt(x, y - 1);
+        ret[3][1] = x;
+        ret[3][2] = y - 1;
+    }
+
+    if (y + 1 < width)
+    {
+        ret[1][0] = getHeightAt(x, y + 1) + getDirtAt(x, y + 1);
+        ret[1][1] = x;
+        ret[1][2] = y + 1;
     }
 
     return ret;
