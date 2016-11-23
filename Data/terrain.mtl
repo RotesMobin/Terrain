@@ -1,0 +1,3 @@
+newmtl terrain
+illum 0
+map_Kd ColorMap.png
