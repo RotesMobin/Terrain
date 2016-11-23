@@ -470,8 +470,8 @@ void Terrain::generateDirtMap()
         }
     }
 
-    qDebug() << "Dirt Max : " << max;
-    qDebug() << "Dirt Min : " << min;
+    //qDebug() << "Dirt Max : " << max;
+    //qDebug() << "Dirt Min : " << min;
     qDebug() << map.save("DirtMap.png");
 }
 

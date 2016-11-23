@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     //terrain.initializeDirt();
     terrain.erode(15);
 
-    qDebug() << timer.elapsed();
+    qDebug() << "Temps d'éxecution Erosion Th : " << timer.elapsed();
     timer.restart();
 
     terrain.initializeSlope();
@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 
 
     terrain.initNormal();
-    terrain.initVeget(30,300);
+    terrain.initVeget(50,300);
 
-    qDebug() << timer.elapsed();
+    qDebug() << "Temps d'éxecution Végétation : " << timer.elapsed();
 
     terrain.drawVeget();
 
