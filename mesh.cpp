@@ -28,7 +28,7 @@ void Mesh::saveAsObj(Terrain obj){
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
     out<<"o Terrain\n";
-    out<<"mtllib Data\terrain.mtl\n";
+    out<<"mtllib Data/terrain.mtl\n";
     for(int i=0; i<sommets.size();i++){
         out<<"v "<<sommets[i].getPoint().x()<<" "<<sommets[i].getPoint().y()<<" "<<sommets[i].getPoint().z()<<"\n";
     }
