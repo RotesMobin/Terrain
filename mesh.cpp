@@ -137,10 +137,10 @@ void Mesh::drawType2(int& start,QVector3D pos, int size){
 
 
 
-    out<<"f  "<<1+start<<"//  "<<3+start<<"//  "<<2+start<<"//\n";
-    out<<"f  "<<1+start<<"//  "<<4+start<<"//  "<<3+start<<"//\n";
-    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<4+start<<"//\n";
-    out<<"f  "<<2+start<<"//  "<<3+start<<"//  "<<4+start<<"//\n";
+    out<<"f  "<<1+start<<"/1/  "<<3+start<<"/1/  "<<2+start<<"/1/\n";
+    out<<"f  "<<1+start<<"/1/  "<<4+start<<"/1/  "<<3+start<<"/1/\n";
+    out<<"f  "<<1+start<<"/1/  "<<2+start<<"/1/  "<<4+start<<"/1/\n";
+    out<<"f  "<<2+start<<"/1/  "<<3+start<<"/1/  "<<4+start<<"/1/\n";
 
     start+=4;
 }
