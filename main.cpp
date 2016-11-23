@@ -24,15 +24,14 @@ int main(int argc, char *argv[])
 
     terrain.positiveHeight();
 
-    //terrain.initializeDirt();
     terrain.erode(15);
 
     qDebug() << "Temps d'éxecution Erosion Th : " << timer.elapsed();
     timer.restart();
 
     terrain.initializeSlope();
-    //terrain.waterErode(50);
     terrain.generateDirtMap();
+    terrain.generateColorMap();
 
 
     terrain.initNormal();

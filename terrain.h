@@ -53,6 +53,7 @@ public:
     void waterErode(int iterations);
     void erode(int iterations);
     void generateDirtMap();
+    void generateColorMap();
     void initializeDirt();
     void initializeSlope();
     void initNormal();

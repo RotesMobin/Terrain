@@ -475,6 +475,24 @@ void Terrain::generateDirtMap()
     map.save("DirtMap.png");
 }
 
+void Terrain::generateColorMap()
+{
+    QImage grad = QImage("ColorGradient");
+    QImage map = QImage(width, length, QImage::Format_RGB32);
+
+    double max = *std::max_element(height.constBegin(), height.constEnd());
+
+    for(int i = 0; i < width; i++)
+    {
+        for(int j = 0; j < length; j++)
+        {
+            map.setPixel(i, j, grad.pixel(0, 254 - (((int)getDirtAt(i, j) + (int)getHeightAt(i, j)) / max * 255)));
+        }
+    }
+
+    map.save("ColorMap.png");
+}
+
 void Terrain::initVeget(int nbveget, int nbCycles){
     veget= QVector<vegetation>();
     srand (time(NULL));
