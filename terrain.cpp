@@ -378,7 +378,7 @@ void Terrain::erode(int iterations)
                     distMax *= 0.5;
                     setHeightAt(i, j, getHeightAt(i, j) - distMax);
                     setDirtAt(v8[l][1], v8[l][2], getDirtAt(v8[l][1], v8[l][2]) + distMax);
-                    Slide(v8[l]);
+                    //Slide(v8[l]);
                 }
 
                 for(int s = 0; s < 8; s++)
@@ -415,7 +415,7 @@ void Terrain::Slide(double* from)
         }
     }
 
-    if(distMax > 0 && distMax > talus)
+    if(distMax > 0)
     {
         distMax *= 0.5;
         setHeightAt(from[1], from[2], getHeightAt(from[1], from[2]) - distMax);
@@ -470,8 +470,8 @@ void Terrain::generateDirtMap()
         }
     }
 
-    //qDebug() << "Dirt Max : " << max;
-    //qDebug() << "Dirt Min : " << min;
+    qDebug() << "Dirt Max : " << max;
+    qDebug() << "Dirt Min : " << min;
     qDebug() << map.save("DirtMap.png");
 }
 
