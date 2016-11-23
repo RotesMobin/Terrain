@@ -221,7 +221,7 @@ void Terrain::saveAsImage(QString name)
         map.setPixel(i / length, i % length, qRgb(gray, gray, gray));
     }
 
-    qDebug()<<map.save("map.png");
+    map.save("map.png");
 }
 
 void Terrain::erode(int iterations)
@@ -472,7 +472,7 @@ void Terrain::generateDirtMap()
 
     //qDebug() << "Dirt Max : " << max;
     //qDebug() << "Dirt Min : " << min;
-    qDebug() << map.save("DirtMap.png");
+    map.save("DirtMap.png");
 }
 
 void Terrain::initVeget(int nbveget, int nbCycles){
@@ -667,7 +667,7 @@ void Terrain::initializeSlope()
         }
     }
 
-    qDebug() << map.save("SlopeMap.png");
+    map.save("SlopeMap.png");
 }
 
 void Terrain::initializeDirt()
