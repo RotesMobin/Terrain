@@ -40,79 +40,99 @@ void Mesh::saveAsObj(Terrain obj){
         out<<"f "<<faces[i].getS1()+1<<"//"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"//"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"//"<<faces[i].getS3()+1<<"\n";
 
     }
-
-    out<<"mtllib Data/tree.mtl\n";
-    int start=sommets.size();
+    int tree1=0,tree2=0;
     for(int i=0;i<obj.veget.size();i++){
-        out<<drawTree(obj.veget[i].type,start,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)+obj.getDirtAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+
+        switch (obj.veget[i].type) {
+        case 1:
+            drawType1(tree1,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)+obj.getDirtAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+            break;
+        case 2:
+            drawType2(tree2,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)+obj.getDirtAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+            break;
+        default:
+            drawType2(tree2,QVector3D(obj.veget[i].x,obj.veget[i].y,obj.getHeightAt(obj.veget[i].x,obj.veget[i].y)+obj.getDirtAt(obj.veget[i].x,obj.veget[i].y)),obj.veget[i].rayon);
+            break;
+        }
     }
 
     file.close();
 }
 
-QString Mesh::drawTree(int type,int& start, QVector3D pos, int size){
-    switch (type) {
-    case 1:
-        return(drawType1(start,pos,size));
-        break;
-    default:
-        return(drawType2(start,pos,size));
-        break;
-    }
-}
 
-QString Mesh::drawType1(int& start,QVector3D pos, int size){
-    QString tree;
+void Mesh::drawType1(int& start,QVector3D pos, int size){
     int height=size>4?size:4;
 
-    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+    QFile file("tree1.obj");
+    QTextStream out(&file);
 
-    tree=tree+"vt 0.000000 0.000000\n";
-    tree=tree+"usemtl light-green\n";
+    if(start==0){
+        file.open(QIODevice::WriteOnly);
+        out<<"mtllib Data/tree.mtl\n";
+    }
+    else{
+        file.open(QIODevice::Append);
+    }
 
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(5+start)+"//\n";
-    tree=tree+"f  "+QString::number(3+start)+"//  "+QString::number(1+start)+"//  "+QString::number(5+start)+"//\n";
-    tree=tree+"f  "+QString::number(3+start)+"//  "+QString::number(5+start)+"//  "+QString::number(7+start)+"//\n";
-    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//  "+QString::number(7+start)+"//\n";
-    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(7+start)+"//  "+QString::number(8+start)+"//\n";
-    tree=tree+"f  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//  "+QString::number(6+start)+"//\n";
-    tree=tree+"f  "+QString::number(4+start)+"//  "+QString::number(8+start)+"//  "+QString::number(6+start)+"//\n";
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//\n";
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//\n";
-    tree=tree+"f  "+QString::number(5+start)+"//  "+QString::number(6+start)+"//  "+QString::number(7+start)+"//\n";
-    tree=tree+"f  "+QString::number(6+start)+"//  "+QString::number(8+start)+"//  "+QString::number(7+start)+"//\n";
+    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<0.0+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<1.0+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+
+    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+    out<<"v  "<<0.0+pos.x()<<" "<<1.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+    out<<"v  "<<1.0+pos.x()<<" "<<1.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+
+    out<<"vt 0.000000 0.000000\n";
+    out<<"usemtl light-green\n";
+
+    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<5+start<<"//\n";
+    out<<"f  "<<2+start<<"//  "<<6+start<<"//  "<<5+start<<"//\n";
+    out<<"f  "<<3+start<<"//  "<<1+start<<"//  "<<5+start<<"//\n";
+    out<<"f  "<<3+start<<"//  "<<5+start<<"//  "<<7+start<<"//\n";
+    out<<"f  "<<4+start<<"//  "<<3+start<<"//  "<<7+start<<"//\n";
+    out<<"f  "<<4+start<<"//  "<<7+start<<"//  "<<8+start<<"//\n";
+    out<<"f  "<<2+start<<"//  "<<4+start<<"//  "<<6+start<<"//\n";
+    out<<"f  "<<4+start<<"//  "<<8+start<<"//  "<<6+start<<"//\n";
+    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<4+start<<"//\n";
+    out<<"f  "<<1+start<<"//  "<<4+start<<"//  "<<3+start<<"//\n";
+    out<<"f  "<<5+start<<"//  "<<6+start<<"//  "<<7+start<<"//\n";
+    out<<"f  "<<6+start<<"//  "<<8+start<<"//  "<<7+start<<"//\n";
 
     start+=8;
 
-    return tree;
+    file.close();
 }
 
-QString Mesh::drawType2(int& start,QVector3D pos, int size){
-    QString tree;
+void Mesh::drawType2(int& start,QVector3D pos, int size){
     int height=size>4?size:4;
 
-    tree=tree+"v  "+QString::number(0.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(1.0+pos.x())+" "+QString::number(0.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(0.5+pos.x())+" "+QString::number(1.0+pos.y())+" "+QString::number(0.0+pos.z())+"\n";
-    tree=tree+"v  "+QString::number(0.5+pos.x())+" "+QString::number(0.5+pos.y())+" "+QString::number((1.0*height/4)+pos.z())+"\n";
+    QFile file("tree2.obj");
+    QTextStream out(&file);
 
-    tree=tree+"vt 0.000000 0.000000\n";
-    tree=tree+"usemtl orange\n";
+    if(start==0){
+        file.open(QIODevice::WriteOnly);
+        out<<"mtllib Data/tree.mtl\n";
+    }
+    else{
+        file.open(QIODevice::Append);
+    }
 
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(3+start)+"//  "+QString::number(2+start)+"//\n";
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(4+start)+"//  "+QString::number(3+start)+"//\n";
-    tree=tree+"f  "+QString::number(1+start)+"//  "+QString::number(2+start)+"//  "+QString::number(4+start)+"//\n";
-    tree=tree+"f  "+QString::number(2+start)+"//  "+QString::number(3+start)+"//  "+QString::number(4+start)+"//\n";
+    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<0.5+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<0.5+pos.x()<<" "<<0.5+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+
+    out<<"vt 0.000000 0.000000\n";
+    out<<"usemtl orange\n";
+
+    out<<"f  "<<1+start<<"//  "<<3+start<<"//  "<<2+start<<"//\n";
+    out<<"f  "<<1+start<<"//  "<<4+start<<"//  "<<3+start<<"//\n";
+    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<4+start<<"//\n";
+    out<<"f  "<<2+start<<"//  "<<3+start<<"//  "<<4+start<<"//\n";
 
     start+=4;
-    return tree;
 }
 
 int Mesh::LoadFromOff(QString fileName){
