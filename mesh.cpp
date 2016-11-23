@@ -68,7 +68,7 @@ void Mesh::saveAsObj(Terrain obj){
 
 
 void Mesh::drawType1(int& start,QVector3D pos, int size){
-    int height=size*4+2;
+    int height=size*2;
 
     QFile file("tree1.obj");
     QTextStream out(&file);
