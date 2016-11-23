@@ -478,14 +478,15 @@ void Terrain::generateDirtMap()
 void Terrain::initVeget(int nbveget, int nbCycles){
     veget= QVector<vegetation>();
     srand (time(NULL));
-    doCycles(nbCycles,nbveget);
+    double maxDirt=*std::max_element(dirt.constBegin(), dirt.constEnd());
+    doCycles(nbCycles,nbveget,maxDirt);
 
 }
 
-void Terrain::doCycles(int nbCycles,int nbveget){
+void Terrain::doCycles(int nbCycles,int nbveget, double maxDirt){
     for(int k=0;k<nbCycles;k++){
         int i=0;
-        addTree(nbveget);
+        addTree(nbveget,maxDirt);
         while(i<veget.count()){
 
             int hasIncrease=0;
@@ -532,13 +533,13 @@ void Terrain::doCycles(int nbCycles,int nbveget){
     }
 }
 
-void Terrain::addTree(int nbveget){
+void Terrain::addTree(int nbveget, double maxDirt){
     int x,y,type,index;
     for (int t=0;t<nbveget;t++){
         x = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(width)));
         y = 0 + static_cast <int> (rand()) /( static_cast <int> (RAND_MAX/(length)));
         type=rand()%2;
-        vegetation toAdd=vegetation(type,x,y);
+        vegetation toAdd=vegetation(type,x,y, maxDirt);
             if(toAdd.IsAlived(getAvgSlope(x,y),getDirtAt(x,y),getHeightAt(x,y))){
                 veget.append(toAdd);
             }
