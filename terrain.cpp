@@ -466,7 +466,7 @@ void Terrain::generateDirtMap()
         for(int j = 0; j < length; j++)
         {
             val = (int)getDirtAt(i, j) / max * 255;
-            map.setPixel(i, j, qRgb(val, 50, 255 - val));
+            map.setPixel(i, length - j - 1, qRgb(val, 50, 255 - val));
         }
     }
 
@@ -486,7 +486,7 @@ void Terrain::generateColorMap()
     {
         for(int j = 0; j < length; j++)
         {
-            map.setPixel(i, j, grad.pixel(0, 254 - (((int)getDirtAt(i, j) + (int)getHeightAt(i, j)) / max * 255)));
+            map.setPixel(i, length - j - 1, grad.pixel(0, 254 - (((int)getDirtAt(i, j) + (int)getHeightAt(i, j)) / max * 255)));
         }
     }
 
@@ -681,7 +681,7 @@ void Terrain::initializeSlope()
         {
             val = (int)getAvgSlope(i, j) / max * 255;
             gray = qGray(val, val, val);
-            map.setPixel(i, j, qRgb(val, 50, 255 - val));
+            map.setPixel(i, length - j - 1, qRgb(val, 50, 255 - val));
         }
     }
 
