@@ -490,7 +490,6 @@ void Terrain::doCycles(int nbCycles,int nbveget, double maxDirt){
         while(i<veget.count()){
 
             int hasIncrease=0;
-            bool hasBeenRemoved=false;
             int index=0;
 
             while(i>-1&&checkVeget2(veget[i].x,veget[i].y,veget[i].rayon,index)){
@@ -509,23 +508,21 @@ void Terrain::doCycles(int nbCycles,int nbveget, double maxDirt){
                    if(hasIncrease==0||hasIncrease==2){
                        hasIncrease=1;
                        veget[i].age++;
-                       veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
+                       veget[i].rayon+=veget[i].rayon/veget[i].age/5;
                    }
              }
             }
             if(i>0){
                 if(hasIncrease==0){
                     veget[i].age++;
-                    veget[i].rayon+=log(1+veget[i].age)/log(veget[i].ageMax);
+                    veget[i].rayon+=veget[i].rayon/veget[i].age/5;
 
                 }
-                if(!hasBeenRemoved){
                     if(veget[i].age>veget[i].ageMax){
                         veget.remove(i);
                             i--;
 
                     }
-                }
             }
            i++;
         }
