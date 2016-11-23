@@ -33,7 +33,7 @@ void Mesh::saveAsObj(Terrain obj){
         out<<"v "<<sommets[i].getPoint().x()<<" "<<sommets[i].getPoint().y()<<" "<<sommets[i].getPoint().z()<<"\n";
     }
     out<<"\n";
-
+    out<<"usemtl terrain\n";
     for(int i=0; i<sommets.size();i++){
         out<<"vt "<<sommets[i].getPoint().x()/obj.getWidth()
           <<" "<<sommets[i].getPoint().y()/obj.getLength()<<"\n";
@@ -45,7 +45,6 @@ void Mesh::saveAsObj(Terrain obj){
     out<<"\n";
     for(int i=0;i<faces.size();i++){
         out<<"f "<<faces[i].getS1()+1<<"/"<<faces[i].getS1()+1<<"/"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"/"<<faces[i].getS2()+1<<"/"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"/"<<faces[i].getS3()+1<<"/"<<faces[i].getS3()+1<<"\n";
-
     }
     int tree1=0,tree2=0;
     for(int i=0;i<obj.veget.size();i++){
