@@ -28,8 +28,15 @@ void Mesh::saveAsObj(Terrain obj){
     file.open(QIODevice::WriteOnly);
     QTextStream out(&file);
     out<<"o Terrain\n";
+    out<<"mtllib terrain.mtl\n";
     for(int i=0; i<sommets.size();i++){
         out<<"v "<<sommets[i].getPoint().x()<<" "<<sommets[i].getPoint().y()<<" "<<sommets[i].getPoint().z()<<"\n";
+    }
+    out<<"\n";
+
+    for(int i=0; i<sommets.size();i++){
+        out<<"vt "<<sommets[i].getPoint().x()/obj.getWidth()
+          <<" "<<sommets[i].getPoint().y()/obj.getLength()<<"\n";
     }
     out<<"\n";
     for(int i=0;i<obj.norm.size();i++){
@@ -37,7 +44,7 @@ void Mesh::saveAsObj(Terrain obj){
     }
     out<<"\n";
     for(int i=0;i<faces.size();i++){
-        out<<"f "<<faces[i].getS1()+1<<"//"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"//"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"//"<<faces[i].getS3()+1<<"\n";
+        out<<"f "<<faces[i].getS1()+1<<"/"<<faces[i].getS1()+1<<"/"<<faces[i].getS1()+1<<" "<<faces[i].getS2()+1<<"/"<<faces[i].getS2()+1<<"/"<<faces[i].getS2()+1<<" "<<faces[i].getS3()+1<<"/"<<faces[i].getS3()+1<<"/"<<faces[i].getS3()+1<<"\n";
 
     }
     int tree1=0,tree2=0;
@@ -61,7 +68,7 @@ void Mesh::saveAsObj(Terrain obj){
 
 
 void Mesh::drawType1(int& start,QVector3D pos, int size){
-    int height=size>4?size:4;
+    int height=size*4+2;
 
     QFile file("tree1.obj");
     QTextStream out(&file);
@@ -69,36 +76,37 @@ void Mesh::drawType1(int& start,QVector3D pos, int size){
     if(start==0){
         file.open(QIODevice::WriteOnly);
         out<<"mtllib Data/tree.mtl\n";
+        out<<"vt 0.000000 0.000000\n";
+        out<<"usemtl light-green\n";
     }
     else{
         file.open(QIODevice::Append);
     }
 
-    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<0.0+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<1.0+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(-0.5*height)+pos.x()<<" "<<(-0.5*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(0.5*height)+pos.x()<<" "<<(-0.5*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(-0.5*height)+pos.x()<<" "<<(0.5*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(0.5*height)+pos.x()<<" "<<(0.5*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
 
-    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
-    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
-    out<<"v  "<<0.0+pos.x()<<" "<<1.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
-    out<<"v  "<<1.0+pos.x()<<" "<<1.0+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+    out<<"v  "<<(-0.5*height)+pos.x()<<" "<<(-0.5*height)+pos.y()<<" "<<(1.0*height)+pos.z()<<"\n";
+    out<<"v  "<<(0.5*height)+pos.x()<<" "<<(-0.5*height)+pos.y()<<" "<<(1.0*height)+pos.z()<<"\n";
+    out<<"v  "<<(-0.5*height)+pos.x()<<" "<<(0.5*height)+pos.y()<<" "<<(1.0*height)+pos.z()<<"\n";
+    out<<"v  "<<(0.5*height)+pos.x()<<" "<<(0.5*height)+pos.y()<<" "<<(1.0*height)+pos.z()<<"\n";
 
-    out<<"vt 0.000000 0.000000\n";
-    out<<"usemtl light-green\n";
 
-    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<5+start<<"//\n";
-    out<<"f  "<<2+start<<"//  "<<6+start<<"//  "<<5+start<<"//\n";
-    out<<"f  "<<3+start<<"//  "<<1+start<<"//  "<<5+start<<"//\n";
-    out<<"f  "<<3+start<<"//  "<<5+start<<"//  "<<7+start<<"//\n";
-    out<<"f  "<<4+start<<"//  "<<3+start<<"//  "<<7+start<<"//\n";
-    out<<"f  "<<4+start<<"//  "<<7+start<<"//  "<<8+start<<"//\n";
-    out<<"f  "<<2+start<<"//  "<<4+start<<"//  "<<6+start<<"//\n";
-    out<<"f  "<<4+start<<"//  "<<8+start<<"//  "<<6+start<<"//\n";
-    out<<"f  "<<1+start<<"//  "<<2+start<<"//  "<<4+start<<"//\n";
-    out<<"f  "<<1+start<<"//  "<<4+start<<"//  "<<3+start<<"//\n";
-    out<<"f  "<<5+start<<"//  "<<6+start<<"//  "<<7+start<<"//\n";
-    out<<"f  "<<6+start<<"//  "<<8+start<<"//  "<<7+start<<"//\n";
+
+    out<<"f  "<<1+start<<"/1/  "<<2+start<<"/1/  "<<5+start<<"/1/\n";
+    out<<"f  "<<2+start<<"/1/  "<<6+start<<"/1/  "<<5+start<<"/1/\n";
+    out<<"f  "<<3+start<<"/1/  "<<1+start<<"/1/  "<<5+start<<"/1/\n";
+    out<<"f  "<<3+start<<"/1/  "<<5+start<<"/1/  "<<7+start<<"/1/\n";
+    out<<"f  "<<4+start<<"/1/  "<<3+start<<"/1/  "<<7+start<<"/1/\n";
+    out<<"f  "<<4+start<<"/1/  "<<7+start<<"/1/  "<<8+start<<"/1/\n";
+    out<<"f  "<<2+start<<"/1/  "<<4+start<<"/1/  "<<6+start<<"/1/\n";
+    out<<"f  "<<4+start<<"/1/  "<<8+start<<"/1/  "<<6+start<<"/1/\n";
+    out<<"f  "<<1+start<<"/1/  "<<2+start<<"/1/  "<<4+start<<"/1/\n";
+    out<<"f  "<<1+start<<"/1/  "<<4+start<<"/1/  "<<3+start<<"/1/\n";
+    out<<"f  "<<5+start<<"/1/  "<<6+start<<"/1/  "<<7+start<<"/1/\n";
+    out<<"f  "<<6+start<<"/1/  "<<8+start<<"/1/  "<<7+start<<"/1/\n";
 
     start+=8;
 
@@ -106,7 +114,7 @@ void Mesh::drawType1(int& start,QVector3D pos, int size){
 }
 
 void Mesh::drawType2(int& start,QVector3D pos, int size){
-    int height=size>4?size:4;
+    int height=size*4+2;
 
     QFile file("tree2.obj");
     QTextStream out(&file);
@@ -114,18 +122,21 @@ void Mesh::drawType2(int& start,QVector3D pos, int size){
     if(start==0){
         file.open(QIODevice::WriteOnly);
         out<<"mtllib Data/tree.mtl\n";
+        out<<"vt 0.000000 0.000000\n";
+        out<<"usemtl orange\n";
     }
     else{
         file.open(QIODevice::Append);
     }
 
-    out<<"v  "<<0.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<1.0+pos.x()<<" "<<0.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<0.5+pos.x()<<" "<<1.0+pos.y()<<" "<<0.0+pos.z()<<"\n";
-    out<<"v  "<<0.5+pos.x()<<" "<<0.5+pos.y()<<" "<<(1.0*height/4)+pos.z()<<"\n";
+    out<<"v  "<<(-0.5*height)+pos.x()<<" "<<(0.0*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(0.5*height)+pos.x()<<" "<<(0.0*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<(0.0*height)+pos.x()<<" "<<(sqrt(3)/2*height)+pos.y()<<" "<<0.0+pos.z()<<"\n";
+    out<<"v  "<<((-0.5*height)+pos.x()+(0.5*height)+pos.x()+(0.0*height)+pos.x())/3
+      <<" "<<((0.0*height)+pos.y()+(0.0*height)+pos.y()+(sqrt(3)/2*height)+pos.y())/3<<" "
+     <<(1.0*height)+pos.z()<<"\n";
 
-    out<<"vt 0.000000 0.000000\n";
-    out<<"usemtl orange\n";
+
 
     out<<"f  "<<1+start<<"//  "<<3+start<<"//  "<<2+start<<"//\n";
     out<<"f  "<<1+start<<"//  "<<4+start<<"//  "<<3+start<<"//\n";
