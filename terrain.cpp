@@ -567,14 +567,17 @@ void Terrain::drawVeget(){
     painter.begin(map);
     map->fill(QColor("black"));
     for(int i=0;i<veget.count();i++){
-        if(veget[i].slopeMax==90){
+        if(veget[i].type==1){
             painter.setPen(QColor("red"));
         }else{
             painter.setPen(QColor("blue"));
         }
         painter.drawEllipse(QPoint(veget[i].x,veget[i].y),veget[i].rayon,veget[i].rayon);
     }
-    map->save("Veget.png");
+    QImage image= map->toImage();
+    QImage image2=image.transformed(QMatrix().rotate(180));
+    image= image2.mirrored(true,false);
+    image.save("Veget.png");
     painter.end();
     delete map;
 }
