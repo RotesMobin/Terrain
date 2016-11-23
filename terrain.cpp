@@ -477,7 +477,7 @@ void Terrain::generateDirtMap()
 
 void Terrain::generateColorMap()
 {
-    QImage grad = QImage("ColorGradient");
+    QImage grad = QImage("Data/ColorGradient");
     QImage map = QImage(width, length, QImage::Format_RGB32);
 
     double max = *std::max_element(height.constBegin(), height.constEnd());
