@@ -9,7 +9,7 @@ vegetation::vegetation(int type, int x, int y, double maxDirt){
         this->age=1;
         this->rayon=2;
         this->slopeMax=110;
-        this->dirtMin=0.1;//maxDirt*0.3;
+        this->dirtMin=maxDirt*0.8;
         this->heightMax=180;
         this->ageMax=75;
     }else{
